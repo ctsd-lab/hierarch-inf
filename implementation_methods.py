@@ -15,13 +15,25 @@ Design goals
    handled through ``custom_joint_prior`` in the same style used in the
    Bioscrape workflow.
 
+For a fixed finite-horizon compatibility tolerance ``epsilon`` and
+posterior behavioral-support level-set boundary ``gamma``, the reduced-model
+posterior induces
+
+    b_epsilon(beta)
+        = P_{theta_hat ~ pi_hat(. | y_bar)}
+          [d(y(beta), y_hat(theta_hat)) <= epsilon].
+
 The GP learns the sign of
 
-    v(beta) = epsilon - r(beta),
+    v_epsilon,gamma(beta) = b_epsilon(beta) - gamma.
 
-where r(beta) is a posterior summary of the discrepancy between the detailed
-trajectory at beta and trajectories induced by reduced-posterior samples.
-The retained region is v(beta) >= 0.
+The behaviorally retained detailed-parameter set is therefore
+
+    K_epsilon,gamma = {beta : v_epsilon,gamma(beta) >= 0}.
+
+With reduced-posterior MCMC samples, ``b_epsilon`` is estimated by the empirical
+fraction of stored reduced trajectories whose discrepancy from the detailed
+trajectory is at most ``epsilon``.
 
 No model-specific ODE simulation code is included here.
 """
@@ -154,17 +166,64 @@ def map_gp_space_to_parameters(
 @dataclass
 class GPValidityModel:
     """
-    Frozen description of a learned behavioral-validity GP.
+    Frozen GP approximation of the behavioral-support level set.
 
-    The fitted sklearn GP is trained on scaled validity values
+    For compatibility tolerance ``epsilon`` and behavioral-support level-set
+    boundary ``posterior_level_set_boundary = gamma``, the GP target is
 
-        y = v / validity_scale,
+        v_epsilon,gamma(theta)
+            = b_epsilon(theta) - gamma,
 
-    so the sign of the GP mean is identical to the sign of v.
+    where
 
-    ``custom_joint_prior`` returns ``np.inf`` for GP-rejected parameter tuples
-    and ``0.0`` for GP-retained tuples, matching the custom-prior convention
-    used in the attached GP-filtered Bioscrape inference script.
+        b_epsilon(theta)
+            = P_{theta_hat ~ pi_hat(. | y_bar)}
+              [d(y(theta), y_hat(theta_hat)) <= epsilon].
+
+    The fitted sklearn GP is trained on the scaled target
+
+        y_gp = v_epsilon,gamma / validity_scale,
+
+    so the zero level set is unchanged by scaling.
+
+    Threshold definitions
+    ---------------------
+    epsilon
+        Finite-horizon *behavioral compatibility tolerance*. A detailed/reduced
+        pair is behaviorally compatible when
+
+            d(y(theta), y_hat(theta_hat)) <= epsilon.
+
+    posterior_level_set_boundary
+        The support level ``gamma in (0,1)`` defining the retained set
+
+            K_epsilon,gamma
+                = {theta : b_epsilon(theta) >= gamma}
+
+        and therefore the behavioral-support level-set boundary
+
+            b_epsilon(theta) = gamma.
+
+    data_discrepancy_threshold
+        The detailed-model data-fit tolerance ``eta`` defining
+
+            F_eta
+                = {theta : d(y(theta), y_bar) <= eta}.
+
+        It is stored with the GP object because the retention theorem relates
+        ``F_eta`` to ``K_epsilon,gamma`` through
+
+            gamma <= m_pi_hat(epsilon - eta).
+
+    gp_screening_level
+        The GP screening level ``zeta``. During production detailed-model MCMC,
+        a proposal is screened when
+
+            p_K(theta) = Phi(mu(theta) / sigma(theta)) <= zeta.
+
+    ``custom_joint_prior`` implements this fixed-GP screening rule using the
+    same custom-prior convention as the attached GP-filtered inference script:
+    ``0.0`` means allowed and ``np.inf`` means rejected.
     """
 
     gp: GaussianProcessRegressor
@@ -173,8 +232,11 @@ class GPValidityModel:
     upper_bounds: np.ndarray
     validity_scale: float
     log_scale: bool = True
+
     epsilon: Optional[float] = None
-    posterior_quantile: Optional[float] = None
+    posterior_level_set_boundary: Optional[float] = None
+    data_discrepancy_threshold: Optional[float] = None
+    gp_screening_level: float = 0.01
     gp_noise: float = 1e-8
 
     def parameters_to_gp(self, parameters: ArrayLike) -> np.ndarray:
@@ -197,7 +259,10 @@ class GPValidityModel:
         missing = [name for name in self.param_names if name not in params_dict]
         if missing:
             raise KeyError(f"Missing GP parameters: {missing}")
-        return np.asarray([params_dict[name] for name in self.param_names], dtype=float)
+        return np.asarray(
+            [params_dict[name] for name in self.param_names],
+            dtype=float,
+        )
 
     def predict(
         self,
@@ -207,13 +272,20 @@ class GPValidityModel:
         physical_validity_scale: bool = True,
     ):
         """
-        Predict validity at physical parameter values.
+        Predict ``v_epsilon,gamma(theta)`` at physical parameter values.
 
-        By default the returned mean and standard deviation are rescaled to the
-        physical v(beta) units used to train the GP.
+        By default, the returned mean and standard deviation are rescaled from
+        the GP training scale to behavioral-support units. The zero level set is
+
+            v_epsilon,gamma(theta) = 0
+
+        which is equivalent to
+
+            b_epsilon(theta) = gamma.
         """
         X = self.parameters_to_gp(parameters)
         X2 = np.atleast_2d(X)
+
         if return_std:
             mu, std = self.gp.predict(X2, return_std=True)
             if physical_validity_scale:
@@ -226,43 +298,67 @@ class GPValidityModel:
             mu = mu * self.validity_scale
         return mu
 
-    def sign_misclassification_probability(self, parameters: ArrayLike) -> np.ndarray:
+    def sign_misclassification_probability(
+        self,
+        parameters: ArrayLike,
+    ) -> np.ndarray:
+        """Return the GP posterior probability of misclassifying the sign of v."""
         X = self.parameters_to_gp(parameters)
-        return gp_sign_misclassification_probability(self.gp, np.atleast_2d(X))
+        return gp_sign_misclassification_probability(
+            self.gp,
+            np.atleast_2d(X),
+        )
 
     def retained_probability(self, parameters: ArrayLike) -> np.ndarray:
+        """
+        Return
+
+            p_K(theta) = P_GP[v_epsilon,gamma(theta) >= 0]
+                       = Phi(mu(theta) / sigma(theta)).
+        """
         X = self.parameters_to_gp(parameters)
-        return gp_retained_probability(self.gp, np.atleast_2d(X))
+        return gp_retained_probability(
+            self.gp,
+            np.atleast_2d(X),
+        )
 
     def custom_joint_prior(
         self,
         params_dict: Mapping[str, float],
         *,
-        retained_probability_threshold: Optional[float] = None,
+        gp_screening_level: Optional[float] = None,
     ) -> float:
         """
-        GP-based hard prior for use with :func:`py_inference`.
+        Fixed-GP hard behavioral prior for :func:`py_inference`.
 
         Parameters
         ----------
         params_dict
-            Dictionary of physical parameter values.
-        retained_probability_threshold
-            If None, retain when GP posterior mean >= 0, matching the attached
-            ``exp2_gp_inference`` script.
+            Dictionary of physical detailed-model parameter values.
 
-            If supplied, retain when
-                P_GP[v(beta) >= 0] >= threshold.
+        gp_screening_level
+            Optional override of the stored GP screening level ``zeta``.
+            A proposal is rejected when
+
+                p_K(theta) <= zeta,
+
+            where
+
+                p_K(theta) = Phi(mu(theta) / sigma(theta)).
+
+            If omitted, ``self.gp_screening_level`` is used.
 
         Returns
         -------
         float
-            0.0 if retained, np.inf if rejected.
+            ``0.0`` if the proposal passes behavioral screening and ``np.inf``
+            if it is screened.
 
         Notes
         -----
-        This uses a *cost / negative-log-prior* convention for the custom prior:
-        finite zero means "allowed" and +infinity means "reject".
+        This follows the production-inference rule in the updated theory: the
+        GP is trained and frozen before detailed-model MCMC, then evaluated at
+        every proposal before the expensive detailed-model likelihood.
         """
         beta = self._dict_to_vector(params_dict)
 
@@ -271,17 +367,18 @@ class GPValidityModel:
         if np.any(beta < self.lower_bounds) or np.any(beta > self.upper_bounds):
             return np.inf
 
+        zeta = (
+            self.gp_screening_level
+            if gp_screening_level is None
+            else float(gp_screening_level)
+        )
+        if not (0.0 <= zeta < 1.0):
+            raise ValueError("gp_screening_level must lie in [0, 1).")
+
         X = self.parameters_to_gp(beta).reshape(1, -1)
-
-        if retained_probability_threshold is None:
-            mu = float(self.gp.predict(X)[0])
-            return 0.0 if mu >= 0.0 else np.inf
-
-        if not (0.0 < retained_probability_threshold <= 1.0):
-            raise ValueError("retained_probability_threshold must lie in (0, 1].")
-
         p_keep = float(gp_retained_probability(self.gp, X)[0])
-        return 0.0 if p_keep >= retained_probability_threshold else np.inf
+
+        return np.inf if p_keep <= zeta else 0.0
 
 
 def fit_validity_gp(
@@ -580,12 +677,23 @@ def evaluate_gp_classifier(
 
 @dataclass
 class GPMpmResult:
+    """
+    Results of sequential GP-MPM learning of the behavioral-support level set.
+    """
+
     validity_model: GPValidityModel
     X_train: np.ndarray
     parameters_train: np.ndarray
-    discrepancy_train: np.ndarray
+
+    # b_hat_epsilon,M(theta) at every detailed point evaluated for GP training.
+    behavioral_support_train: np.ndarray
+
+    # v_hat_epsilon,gamma,M(theta) = b_hat_epsilon,M(theta) - gamma.
     validity_train: np.ndarray
-    selected_discrepancy: np.ndarray
+
+    # Behavioral-support values acquired after the initial design.
+    selected_behavioral_support: np.ndarray
+
     acquisition_history: np.ndarray
     diagnostics_history: Tuple[Dict[str, float], ...] = field(default_factory=tuple)
 
@@ -612,17 +720,57 @@ def run_gp_mpm(
     X_test: Optional[np.ndarray] = None,
     true_test_valid: Optional[np.ndarray] = None,
     epsilon: Optional[float] = None,
-    posterior_quantile: Optional[float] = None,
+    posterior_level_set_boundary: Optional[float] = None,
+    data_discrepancy_threshold: Optional[float] = None,
+    gp_screening_level: float = 0.01,
 ) -> GPMpmResult:
     """
-    Sequential GP-MPM level-set learning.
+    Sequential GP-MPM learning of
 
-    ``evaluate_validity(beta)`` must return
+        b_epsilon(theta) = gamma.
 
-        (r_beta, v_beta)
+    ``evaluate_validity(theta)`` must return
 
-    for one *physical* detailed-parameter vector beta. Model simulation and the
-    definition of r(beta) therefore remain outside this generic routine.
+        (b_hat, v_hat)
+
+    where
+
+        b_hat
+            is the reduced-posterior Monte Carlo estimate
+
+                b_hat_epsilon,M(theta)
+                    = (1/M) sum_j
+                      1[d(y(theta), y_hat(theta_hat^(j))) <= epsilon],
+
+        v_hat
+            is the scalar GP target
+
+                v_hat_epsilon,gamma,M(theta)
+                    = b_hat_epsilon,M(theta) - gamma.
+
+    The routine is intentionally unaware of the detailed and reduced model
+    implementations. One detailed simulation occurs inside
+    ``evaluate_validity`` whenever GP-MPM selects a new parameter tuple.
+
+    Threshold definitions
+    ---------------------
+    posterior_level_set_boundary
+        ``gamma``: the behavioral-support value defining the target level set
+        ``b_epsilon(theta) = gamma``.
+
+    data_discrepancy_threshold
+        ``eta``: the accepted detailed-model data-fit tolerance defining
+        ``F_eta = {theta : d(y(theta), y_bar) <= eta}``. It is metadata for the
+        retention statement; GP-MPM itself learns the behavioral-support level
+        set.
+
+    epsilon
+        Finite-horizon detailed/reduced compatibility tolerance used inside
+        the indicator defining ``b_hat_epsilon,M``.
+
+    gp_screening_level
+        ``zeta``: after training, production MCMC screens a proposal when the
+        frozen GP gives ``p_K(theta) <= zeta``.
     """
     names = tuple(param_names)
     lo = np.asarray(lower_bounds, dtype=float)
@@ -643,23 +791,26 @@ def run_gp_mpm(
         if X_train.ndim != 2 or X_train.shape[1] != d:
             raise ValueError("X_initial must have shape (n_initial, d).")
 
-    discrepancy = []
-    validity = []
+    support_values = []
+    validity_values = []
 
     for x in X_train:
-        beta = map_gp_space_to_parameters(
-            x, lo, hi, log_scale=log_scale
+        theta = map_gp_space_to_parameters(
+            x,
+            lo,
+            hi,
+            log_scale=log_scale,
         )
-        r_beta, v_beta = evaluate_validity(beta)
-        discrepancy.append(float(r_beta))
-        validity.append(float(v_beta))
+        b_hat, v_hat = evaluate_validity(theta)
+        support_values.append(float(b_hat))
+        validity_values.append(float(v_hat))
 
-    discrepancy = np.asarray(discrepancy, dtype=float)
-    validity = np.asarray(validity, dtype=float)
+    support_values = np.asarray(support_values, dtype=float)
+    validity_values = np.asarray(validity_values, dtype=float)
 
     gp, validity_scale = fit_validity_gp(
         X_train,
-        validity,
+        validity_values,
         initial_length_scale=initial_length_scale,
         length_scale_bounds=length_scale_bounds,
         gp_noise=gp_noise,
@@ -668,10 +819,12 @@ def run_gp_mpm(
     )
 
     X_integration = rng.uniform(
-        0.0, 1.0, size=(int(n_integration_points), d)
+        0.0,
+        1.0,
+        size=(int(n_integration_points), d),
     )
 
-    selected_r = []
+    selected_support = []
     acquisition_history = []
     diagnostics = []
 
@@ -682,7 +835,9 @@ def run_gp_mpm(
 
     for _ in range(int(n_steps)):
         X_candidates = rng.uniform(
-            0.0, 1.0, size=(int(n_acquisition_candidates), d)
+            0.0,
+            1.0,
+            size=(int(n_acquisition_candidates), d),
         )
 
         x_star, _, scores = select_gp_mpm_candidate(
@@ -694,20 +849,26 @@ def run_gp_mpm(
         )
         best_score = float(np.max(scores))
 
-        beta_star = map_gp_space_to_parameters(
-            x_star, lo, hi, log_scale=log_scale
+        theta_star = map_gp_space_to_parameters(
+            x_star,
+            lo,
+            hi,
+            log_scale=log_scale,
         )
-        r_star, v_star = evaluate_validity(beta_star)
+        b_star, v_star = evaluate_validity(theta_star)
 
         X_train = np.vstack((X_train, x_star))
-        discrepancy = np.append(discrepancy, float(r_star))
-        validity = np.append(validity, float(v_star))
+        support_values = np.append(support_values, float(b_star))
+        validity_values = np.append(validity_values, float(v_star))
 
-        # Preserve the initial validity scaling, as in the notebook.
+        # Preserve the original validity scaling while updating the GP.
         gp, _ = fit_validity_gp(
             X_train,
-            validity,
-            initial_length_scale=np.asarray(gp.kernel_.k2.length_scale, dtype=float),
+            validity_values,
+            initial_length_scale=np.asarray(
+                gp.kernel_.k2.length_scale,
+                dtype=float,
+            ),
             length_scale_bounds=length_scale_bounds,
             constant_value=float(gp.kernel_.k1.constant_value),
             gp_noise=gp_noise,
@@ -716,7 +877,7 @@ def run_gp_mpm(
             validity_scale=validity_scale,
         )
 
-        selected_r.append(float(r_star))
+        selected_support.append(float(b_star))
         acquisition_history.append(best_score)
 
         if X_test is not None and true_test_valid is not None:
@@ -732,7 +893,9 @@ def run_gp_mpm(
         validity_scale=validity_scale,
         log_scale=log_scale,
         epsilon=epsilon,
-        posterior_quantile=posterior_quantile,
+        posterior_level_set_boundary=posterior_level_set_boundary,
+        data_discrepancy_threshold=data_discrepancy_threshold,
+        gp_screening_level=float(gp_screening_level),
         gp_noise=gp_noise,
     )
 
@@ -747,10 +910,16 @@ def run_gp_mpm(
         validity_model=validity_model,
         X_train=X_train,
         parameters_train=parameters_train,
-        discrepancy_train=discrepancy,
-        validity_train=validity,
-        selected_discrepancy=np.asarray(selected_r, dtype=float),
-        acquisition_history=np.asarray(acquisition_history, dtype=float),
+        behavioral_support_train=support_values,
+        validity_train=validity_values,
+        selected_behavioral_support=np.asarray(
+            selected_support,
+            dtype=float,
+        ),
+        acquisition_history=np.asarray(
+            acquisition_history,
+            dtype=float,
+        ),
         diagnostics_history=tuple(diagnostics),
     )
 
@@ -841,17 +1010,52 @@ def _flatten_chain(
 class BehavioralGPBuildResult:
     """
     Complete output of :func:`build_behavioral_gp_from_reduced_posterior`.
+
+    Threshold definitions
+    ---------------------
+    posterior_level_set_boundary
+        ``gamma``: the reduced-posterior behavioral-support level defining
+
+            K_epsilon,gamma
+                = {theta : b_epsilon(theta) >= gamma}
+
+        with boundary ``b_epsilon(theta) = gamma``.
+
+    data_discrepancy_threshold
+        ``eta``: the accepted detailed-model discrepancy from the measured
+        trajectory, defining
+
+            F_eta = {theta : d(y(theta), y_bar) <= eta}.
+
+    epsilon
+        The finite-horizon behavioral compatibility tolerance between detailed
+        and reduced outputs. It appears in
+
+            b_epsilon(theta)
+                = P[d(y(theta), y_hat(theta_hat)) <= epsilon].
+
+        The updated retention theorem uses the three thresholds through
+
+            gamma <= m_pi_hat(epsilon - eta)
+
+        to guarantee ``F_eta subset K_epsilon,gamma``.
     """
 
     gp_mpm: GPMpmResult
     reduced_posterior_samples: np.ndarray
     reduced_posterior_trajectories: np.ndarray
+
+    # d(y_hat(theta_hat^(j)), y_bar), one value per reduced posterior sample.
     data_discrepancy_by_sample: np.ndarray
+
     epsilon: float
+    posterior_level_set_boundary: float
     data_discrepancy_threshold: float
-    posterior_quantile: float
-    data_discrepancy_quantile: float
-    epsilon_multiplier: float
+    gp_screening_level: float
+
+    # Empirical reduced-posterior mass m_pi_hat(epsilon - eta).
+    reduced_posterior_fit_mass: float
+
     condition_weights: np.ndarray
 
     @property
@@ -861,10 +1065,12 @@ class BehavioralGPBuildResult:
     @property
     def custom_joint_prior(self):
         """
-        Convenience handle for
+        Convenience handle for behaviorally guided detailed-model inference:
 
-            py_inference(...,
-                         custom_joint_prior=result.custom_joint_prior)
+            py_inference(
+                ...,
+                custom_joint_prior=result.custom_joint_prior,
+            )
         """
         return self.validity_model.custom_joint_prior
 
@@ -879,14 +1085,17 @@ def build_behavioral_gp_from_reduced_posterior(
     detailed_upper_bounds: ArrayLike,
     detailed_trajectory_fn: TrajectoryFn,
     observed_trajectory: np.ndarray,
+
+    epsilon: float,
+    posterior_level_set_boundary: float,
+    data_discrepancy_threshold: float,
+    gp_screening_level: float = 0.01,
+
     condition_weights: Optional[ArrayLike] = None,
     chain_discard: int = 0,
     chain_thin: int = 1,
     max_reduced_samples: Optional[int] = None,
     reduced_sample_seed: int = 2026,
-    posterior_quantile: float = 0.5,
-    data_discrepancy_quantile: float = 0.95,
-    epsilon_multiplier: float = 3.0,
     discrepancy_fn: DiscrepancyFn = weighted_rmse_discrepancy,
     detailed_log_scale: bool = True,
     n_initial: Optional[int] = None,
@@ -905,47 +1114,127 @@ def build_behavioral_gp_from_reduced_posterior(
     true_test_valid: Optional[np.ndarray] = None,
 ) -> BehavioralGPBuildResult:
     """
-    High-level wrapper that constructs the behavioral-validity GP directly from
-    a reduced-model posterior chain.
+    Build the behavioral-support GP directly from a reduced-model MCMC chain.
 
-    This is the model-agnostic counterpart of the workflow spread across the
-    attached GP notebook.
+    This wrapper implements the updated theory language and training target.
 
-    Required model-specific inputs are *callables*:
-      - ``reduced_trajectory_fn(params_dict) -> trajectory``
-      - ``detailed_trajectory_fn(params_dict) -> trajectory``
+    Required model-specific inputs
+    ------------------------------
+    reduced_trajectory_fn
+        ``reduced_trajectory_fn(params_dict) -> trajectory``.
 
-    The trajectories may have shape (T,) for one condition or (C,T) for
-    multiple conditions.
+    detailed_trajectory_fn
+        ``detailed_trajectory_fn(params_dict) -> trajectory``.
+
+    observed_trajectory
+        Measured output ``y_bar`` in the same trajectory representation used by
+        the detailed and reduced trajectory functions.
+
+    Theory thresholds
+    -----------------
+    posterior_level_set_boundary
+        The behavioral-support level ``gamma in (0,1)``. This is the
+        *posterior level-set boundary*. The GP learns
+
+            b_epsilon(theta) = gamma,
+
+        or equivalently the zero level set of
+
+            v_epsilon,gamma(theta)
+                = b_epsilon(theta) - gamma.
+
+        Detailed parameters with ``b_epsilon(theta) >= gamma`` belong to the
+        behaviorally retained set ``K_epsilon,gamma``.
+
+    data_discrepancy_threshold
+        The detailed-model data-fit tolerance ``eta > 0``. It defines the
+        accepted data-fit set
+
+            F_eta
+                = {theta : d(y(theta), y_bar) <= eta}.
+
+        The GP training target does not use ``eta`` directly. ``eta`` enters
+        the retention condition
+
+            gamma <= m_pi_hat(epsilon - eta),
+
+        which guarantees that the data-fit region is contained in the
+        behaviorally retained region.
+
+    epsilon
+        The finite-horizon behavioral compatibility tolerance ``epsilon > 0``.
+        A reduced-posterior sample ``theta_hat^(j)`` supports a detailed
+        parameter ``theta`` when
+
+            d(
+                y(theta),
+                y_hat(theta_hat^(j))
+            ) <= epsilon.
+
+        Thus the Monte Carlo behavioral-support estimate used for GP training
+        is
+
+            b_hat_epsilon,M(theta)
+                = (1/M) sum_j
+                  1[
+                    d(y(theta), y_hat(theta_hat^(j))) <= epsilon
+                  ].
+
+    gp_screening_level
+        The GP screening level ``zeta``. Once GP-MPM training is complete, the
+        GP is frozen. During detailed-model MCMC, the custom prior rejects a
+        proposal when
+
+            p_K(theta) = Phi(mu(theta) / sigma(theta)) <= zeta.
 
     Workflow
     --------
     1. Flatten/subsample the reduced posterior chain.
-    2. Simulate the reduced trajectory for each retained posterior sample using
-       ``reduced_trajectory_fn``.
-    3. Compute the reduced-posterior discrepancy from the observed data.
-    4. Calibrate
-           epsilon =
-               epsilon_multiplier *
-               quantile(D_data_reduced_posterior,
-                        data_discrepancy_quantile).
-    5. For each detailed beta queried by GP-MPM:
-           r(beta) =
-               quantile(D(reduced_posterior_trajectory, detailed(beta)),
-                        posterior_quantile),
-           v(beta) = epsilon - r(beta).
-    6. Learn the zero level set of v(beta) with GP-MPM.
-    7. Return a ``GPValidityModel`` whose ``custom_joint_prior`` can be passed
-       directly to :func:`py_inference`.
+    2. Simulate and store one reduced trajectory for each retained posterior
+       sample.
+    3. Compute each stored reduced trajectory's discrepancy from the measured
+       output.
+    4. Compute the empirical reduced-posterior fit mass
 
-    This function intentionally contains no model-specific simulation code.
+           m_hat_pi(epsilon - eta)
+               = fraction_j[
+                   d(y_hat(theta_hat^(j)), y_bar)
+                   <= epsilon - eta
+                 ].
+
+    5. At every detailed parameter selected by GP-MPM, simulate the detailed
+       model once and compare that trajectory with every stored reduced
+       posterior trajectory.
+    6. Estimate ``b_hat_epsilon,M(theta)`` as the fraction of those
+       discrepancies that are at most ``epsilon``.
+    7. Train the GP on
+
+           v_hat_epsilon,gamma,M(theta)
+               = b_hat_epsilon,M(theta) - gamma.
+
+    8. Return a frozen ``GPValidityModel`` whose ``custom_joint_prior`` can be
+       supplied directly to :func:`py_inference`.
+
+    Notes
+    -----
+    ``discrepancy_fn`` remains configurable so the notebook can supply the same
+    finite-horizon output metric used by the model experiment.
     """
-    if not (0.0 <= posterior_quantile <= 1.0):
-        raise ValueError("posterior_quantile must lie in [0,1].")
-    if not (0.0 <= data_discrepancy_quantile <= 1.0):
-        raise ValueError("data_discrepancy_quantile must lie in [0,1].")
-    if epsilon_multiplier <= 0:
-        raise ValueError("epsilon_multiplier must be positive.")
+    epsilon = float(epsilon)
+    gamma = float(posterior_level_set_boundary)
+    eta = float(data_discrepancy_threshold)
+    zeta = float(gp_screening_level)
+
+    if epsilon <= 0:
+        raise ValueError("epsilon must be positive.")
+    if not (0.0 < gamma < 1.0):
+        raise ValueError(
+            "posterior_level_set_boundary must lie in (0, 1)."
+        )
+    if eta < 0:
+        raise ValueError("data_discrepancy_threshold must be nonnegative.")
+    if not (0.0 <= zeta < 1.0):
+        raise ValueError("gp_screening_level must lie in [0, 1).")
 
     reduced_names = tuple(reduced_param_names)
     detailed_names = tuple(detailed_param_names)
@@ -957,10 +1246,14 @@ def build_behavioral_gp_from_reduced_posterior(
     )
     if samples.shape[1] != len(reduced_names):
         raise ValueError(
-            "Reduced chain parameter dimension does not match reduced_param_names."
+            "Reduced chain parameter dimension does not match "
+            "reduced_param_names."
         )
 
-    if max_reduced_samples is not None and samples.shape[0] > max_reduced_samples:
+    if (
+        max_reduced_samples is not None
+        and samples.shape[0] > max_reduced_samples
+    ):
         rng_sub = np.random.default_rng(reduced_sample_seed)
         idx = rng_sub.choice(
             samples.shape[0],
@@ -972,7 +1265,10 @@ def build_behavioral_gp_from_reduced_posterior(
     reduced_trajectories = []
     for sample in samples:
         params = dict(zip(reduced_names, sample))
-        traj = np.asarray(reduced_trajectory_fn(params), dtype=float)
+        traj = np.asarray(
+            reduced_trajectory_fn(params),
+            dtype=float,
+        )
         if traj.ndim == 1:
             traj = traj[None, :]
         if traj.ndim != 2:
@@ -981,14 +1277,18 @@ def build_behavioral_gp_from_reduced_posterior(
             )
         reduced_trajectories.append(traj)
 
-    reduced_trajectories = np.stack(reduced_trajectories, axis=0)
+    reduced_trajectories = np.stack(
+        reduced_trajectories,
+        axis=0,
+    )
 
     observed = np.asarray(observed_trajectory, dtype=float)
     if observed.ndim == 1:
         observed = observed[None, :]
     if observed.shape != reduced_trajectories.shape[1:]:
         raise ValueError(
-            "observed_trajectory shape must match reduced trajectory shape (C,T)."
+            "observed_trajectory shape must match reduced trajectory "
+            "shape (C,T)."
         )
 
     C = observed.shape[0]
@@ -999,45 +1299,66 @@ def build_behavioral_gp_from_reduced_posterior(
         if weights.shape != (C,):
             raise ValueError("condition_weights must have shape (C,).")
         if np.any(weights < 0) or np.sum(weights) <= 0:
-            raise ValueError("condition_weights must be nonnegative with positive sum.")
+            raise ValueError(
+                "condition_weights must be nonnegative with positive sum."
+            )
         weights = weights / np.sum(weights)
 
-    # Treat the observed data as one candidate trajectory and compute one
-    # discrepancy for every reduced-posterior sample.
-    D_data = discrepancy_fn(
-        reduced_trajectories,
-        observed,
-        weights,
-    )
-    D_data = np.asarray(D_data, dtype=float).reshape(-1)
+    # Reduced posterior distance from measured data:
+    # d(y_hat(theta_hat^(j)), y_bar).
+    D_data = np.asarray(
+        discrepancy_fn(
+            reduced_trajectories,
+            observed,
+            weights,
+        ),
+        dtype=float,
+    ).reshape(-1)
 
-    data_threshold = float(
-        np.quantile(D_data, data_discrepancy_quantile)
-    )
-    epsilon = float(epsilon_multiplier * data_threshold)
+    # Empirical counterpart of m_pi_hat(epsilon - eta).
+    retention_radius = epsilon - eta
+    if retention_radius < 0:
+        reduced_posterior_fit_mass = 0.0
+    else:
+        reduced_posterior_fit_mass = float(
+            np.mean(D_data <= retention_radius)
+        )
 
-    def evaluate_validity(beta_vector: np.ndarray) -> Tuple[float, float]:
-        beta_dict = dict(zip(detailed_names, np.asarray(beta_vector, dtype=float)))
+    def evaluate_validity(
+        theta_vector: np.ndarray,
+    ) -> Tuple[float, float]:
+        theta_dict = dict(
+            zip(
+                detailed_names,
+                np.asarray(theta_vector, dtype=float),
+            )
+        )
+
         detailed_traj = np.asarray(
-            detailed_trajectory_fn(beta_dict),
+            detailed_trajectory_fn(theta_dict),
             dtype=float,
         )
         if detailed_traj.ndim == 1:
             detailed_traj = detailed_traj[None, :]
 
-        D_by_sample = discrepancy_fn(
-            reduced_trajectories,
-            detailed_traj,
-            weights,
-        )
-        r_beta = float(
-            np.quantile(
-                np.asarray(D_by_sample, dtype=float),
-                posterior_quantile,
-            )
-        )
-        v_beta = float(epsilon - r_beta)
-        return r_beta, v_beta
+        D_by_sample = np.asarray(
+            discrepancy_fn(
+                reduced_trajectories,
+                detailed_traj,
+                weights,
+            ),
+            dtype=float,
+        ).reshape(-1)
+
+        # Monte Carlo behavioral support:
+        # b_hat_epsilon,M(theta)
+        b_hat = float(np.mean(D_by_sample <= epsilon))
+
+        # GP target:
+        # v_hat_epsilon,gamma,M(theta)
+        v_hat = float(b_hat - gamma)
+
+        return b_hat, v_hat
 
     gp_mpm = run_gp_mpm(
         evaluate_validity,
@@ -1060,7 +1381,9 @@ def build_behavioral_gp_from_reduced_posterior(
         X_test=X_test,
         true_test_valid=true_test_valid,
         epsilon=epsilon,
-        posterior_quantile=posterior_quantile,
+        posterior_level_set_boundary=gamma,
+        data_discrepancy_threshold=eta,
+        gp_screening_level=zeta,
     )
 
     return BehavioralGPBuildResult(
@@ -1069,10 +1392,10 @@ def build_behavioral_gp_from_reduced_posterior(
         reduced_posterior_trajectories=reduced_trajectories,
         data_discrepancy_by_sample=D_data,
         epsilon=epsilon,
-        data_discrepancy_threshold=data_threshold,
-        posterior_quantile=float(posterior_quantile),
-        data_discrepancy_quantile=float(data_discrepancy_quantile),
-        epsilon_multiplier=float(epsilon_multiplier),
+        posterior_level_set_boundary=gamma,
+        data_discrepancy_threshold=eta,
+        gp_screening_level=zeta,
+        reduced_posterior_fit_mass=reduced_posterior_fit_mass,
         condition_weights=weights,
     )
 
