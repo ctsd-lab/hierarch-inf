@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="autoreduce_922553" name="autoreduce_922553" substanceUnits="mole" timeUnits="second" volumeUnits="litre" areaUnits="square_metre" lengthUnits="metre" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="square_metre">
+        <listOfUnits>
+          <unit kind="metre" exponent="2" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="default" size="1e-06" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="DNA" name="DNA" compartment="default" initialConcentration="0.00199" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="RNAP" name="RNAP" compartment="default" initialConcentration="0.1" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="mRNA" name="mRNA" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="DNA_RNAP" name="DNA_RNAP" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ribo" name="Ribo" compartment="default" initialConcentration="1.2" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GFP" name="GFP" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ribo_mRNA" name="Ribo_mRNA" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="RNase" name="RNase" compartment="default" initialConcentration="0.001" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="RNase_mRNA" name="RNase_mRNA" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="kb_tx" value="10" constant="true"/>
+      <parameter id="ku_tx" value="1" constant="true"/>
+      <parameter id="ktx" value="1" constant="true"/>
+      <parameter id="kb_tl" value="10" constant="true"/>
+      <parameter id="ku_tl" value="1" constant="true"/>
+      <parameter id="ktl" value="1" constant="true"/>
+      <parameter id="kdil" value="0.1" constant="true"/>
+      <parameter id="kb_deg" value="10" constant="true"/>
+      <parameter id="ku_deg" value="1" constant="true"/>
+      <parameter id="kdeg" value="0.1" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="r0" name="r0" reversible="false">
+        <listOfProducts>
+          <speciesReference species="DNA" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="RNAP"/>
+          <modifierSpeciesReference species="DNA_RNAP"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> DNA </ci>
+                </apply>
+                <ci> RNAP </ci>
+                <ci> kb_tx </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> DNA_RNAP </ci>
+                <ci> ktx </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> DNA_RNAP </ci>
+                <ci> ku_tx </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r1" name="r1" reversible="false">
+        <listOfProducts>
+          <speciesReference species="RNAP" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="DNA"/>
+          <modifierSpeciesReference species="DNA_RNAP"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> DNA </ci>
+                </apply>
+                <ci> RNAP </ci>
+                <ci> kb_tx </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> DNA_RNAP </ci>
+                <ci> ktx </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> DNA_RNAP </ci>
+                <ci> ku_tx </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r2" name="r2" reversible="false">
+        <listOfProducts>
+          <speciesReference species="mRNA" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="RNase_mRNA"/>
+          <modifierSpeciesReference species="RNase"/>
+          <modifierSpeciesReference species="Ribo"/>
+          <modifierSpeciesReference species="DNA_RNAP"/>
+          <modifierSpeciesReference species="Ribo_mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <times/>
+                      <ci> DNA_RNAP </ci>
+                      <ci> ktx </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> RNase </ci>
+                      <ci> kb_deg </ci>
+                      <ci> mRNA </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> RNase_mRNA </ci>
+                    <ci> ku_deg </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> Ribo </ci>
+                  <ci> kb_tl </ci>
+                  <ci> mRNA </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ktl </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ku_tl </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r3" name="r3" reversible="false">
+        <listOfProducts>
+          <speciesReference species="DNA_RNAP" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="DNA"/>
+          <modifierSpeciesReference species="RNAP"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> DNA </ci>
+                  <ci> RNAP </ci>
+                  <ci> kb_tx </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> DNA_RNAP </ci>
+                  <ci> ktx </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> DNA_RNAP </ci>
+                <ci> ku_tx </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r4" name="r4" reversible="false">
+        <listOfProducts>
+          <speciesReference species="Ribo" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="mRNA"/>
+          <modifierSpeciesReference species="Ribo_mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> Ribo </ci>
+                </apply>
+                <ci> kb_tl </ci>
+                <ci> mRNA </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ktl </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ku_tl </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r5" name="r5" reversible="false">
+        <listOfProducts>
+          <speciesReference species="GFP" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="Ribo_mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> GFP </ci>
+                </apply>
+                <ci> kdil </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ktl </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r6" name="r6" reversible="false">
+        <listOfProducts>
+          <speciesReference species="Ribo_mRNA" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="Ribo"/>
+          <modifierSpeciesReference species="mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> Ribo </ci>
+                  <ci> kb_tl </ci>
+                  <ci> mRNA </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> Ribo_mRNA </ci>
+                  <ci> ktl </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Ribo_mRNA </ci>
+                <ci> ku_tl </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r7" name="r7" reversible="false">
+        <listOfProducts>
+          <speciesReference species="RNase" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="RNase_mRNA"/>
+          <modifierSpeciesReference species="mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> RNase </ci>
+                </apply>
+                <ci> kb_deg </ci>
+                <ci> mRNA </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> RNase_mRNA </ci>
+                <ci> kdeg </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> RNase_mRNA </ci>
+                <ci> ku_deg </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r8" name="r8" reversible="false">
+        <listOfProducts>
+          <speciesReference species="RNase_mRNA" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="RNase"/>
+          <modifierSpeciesReference species="mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> RNase </ci>
+                  <ci> kb_deg </ci>
+                  <ci> mRNA </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> RNase_mRNA </ci>
+                  <ci> kdeg </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> RNase_mRNA </ci>
+                <ci> ku_deg </ci>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

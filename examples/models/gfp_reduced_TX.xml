@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="autoreduce_964295" name="autoreduce_964295" substanceUnits="mole" timeUnits="second" volumeUnits="litre" areaUnits="square_metre" lengthUnits="metre" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="square_metre">
+        <listOfUnits>
+          <unit kind="metre" exponent="2" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="default" size="1e-06" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="mRNA" name="mRNA" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GFP" name="GFP" compartment="default" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="ktx" value="1" constant="true"/>
+      <parameter id="K_1" value="0.2" constant="true"/>
+      <parameter id="K_2" value="0.11" constant="true"/>
+      <parameter id="kdeg" value="0.1" constant="true"/>
+      <parameter id="ktl" value="1" constant="true"/>
+      <parameter id="kdil" value="0.1" constant="true"/>
+      <parameter id="K_0" value="0.2" constant="true"/>
+      <parameter id="DNA" value="0.00199" constant="true"/>
+      <parameter id="P_tot" value="0.1" constant="true"/>
+      <parameter id="R_tot" value="1.2" constant="true"/>
+      <parameter id="E_tot" value="0.001" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="r0" name="r0" reversible="false">
+        <listOfProducts>
+          <speciesReference species="mRNA" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> DNA </ci>
+                  <ci> P_tot </ci>
+                  <ci> ktx </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> DNA </ci>
+                  <ci> K_1 </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> E_tot </ci>
+                  <ci> kdeg </ci>
+                  <ci> mRNA </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> K_2 </ci>
+                  <ci> mRNA </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="r1" name="r1" reversible="false">
+        <listOfProducts>
+          <speciesReference species="GFP" constant="false"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <ci> GFP </ci>
+                </apply>
+                <ci> kdil </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> R_tot </ci>
+                  <ci> ktl </ci>
+                  <ci> mRNA </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> K_0 </ci>
+                  <ci> mRNA </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

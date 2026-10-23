@@ -1,0 +1,19 @@
+{
+  "fresh_seed_search_seconds": 21.892156000016257,
+  "initial_local_evaluations_seconds": 1.089792300015688,
+  "GP_fit_and_MPM_seconds": 147.60781259997748,
+  "GP_construction_seconds": 170.58976090000942,
+  "timing_scope": "fresh deterministic seed search, 100 new local probes, initial fit, 200 GP-MPM acquisitions",
+  "initial_new_model_evaluations": 100,
+  "cached_initial_points": 29,
+  "GP_MPM_iterations": 200,
+  "new_production_model_evaluations": 2347,
+  "focused_model_evaluations": 300,
+  "fresh_seed_evaluations": 2047,
+  "epsilon": 0.5,
+  "gamma": 0.5,
+  "regions": 1,
+  "local_test_points": 200,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 204 Stepping 2, GenuineIntel"
+}

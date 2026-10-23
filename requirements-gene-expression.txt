@@ -1,0 +1,8 @@
+-r requirements.txt
+pandas>=2
+sympy>=1.11
+python-libsbml>=5.21.1
+biocrnpyler>=1.3.4
+autoreduce>=0.9
+bioscrape @ git+https://github.com/biocircuits/bioscrape.git@paralle-inference-fixes
+corner
