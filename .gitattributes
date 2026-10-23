@@ -1,2 +1,3 @@
 examples/results/p_gp_z0.8_1020.npz filter=lfs diff=lfs merge=lfs -text
+examples/results/exp3_1_init_baseline_inference_40k_gaussian_batched_1020_2.npz filter=lfs diff=lfs merge=lfs -text
 examples/results/exp3_1_init_gp_inference_zeta_0.8_40k_eps0p5_batched_1020_2.npz filter=lfs diff=lfs merge=lfs -text
