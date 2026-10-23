@@ -1,0 +1,10 @@
+name: hierarch-inf
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r requirements-gene-expression.txt
+      - -r requirements-dev.txt

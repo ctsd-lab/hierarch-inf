@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the associated paper."
+type: software
+title: "hierarch-inf: Hierarchical Bayesian parameter inference"
+authors:
+  - family-names: Bai
+    given-names: Jingsong
+  - family-names: Pandey
+    given-names: Ayush
+repository-code: "https://github.com/ctsd-lab/hierarch-inf"
+license: BSD-3-Clause
+preferred-citation:
+  type: article
+  title: "Behavioral Mapping of Hierarchical Dynamical Models Accelerates Bayesian Parameter Inference"
+  authors:
+    - family-names: Bai
+      given-names: Jingsong
+    - family-names: Pandey
+      given-names: Ayush
+  year: 2026
+  journal: "arXiv"
+  date-published: 2026-10-22
+  doi: "10.48550/arXiv.2610.30683"
+  url: "https://arxiv.org/abs/2610.30683"

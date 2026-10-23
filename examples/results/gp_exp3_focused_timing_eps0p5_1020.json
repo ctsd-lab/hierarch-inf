@@ -1,0 +1,17 @@
+{
+  "cached_discrepancy_recalculation_seconds": 1.9491446999600157,
+  "initial_local_evaluations_seconds": 2.4665839000372216,
+  "GP_fit_and_MPM_seconds": 163.46432709996589,
+  "GP_construction_seconds": 167.88005569996312,
+  "timing_scope": "recomputed cached discrepancies, 100 new local evaluations, initial fit, 200 GP-MPM acquisitions; cached detailed simulations excluded",
+  "initial_new_model_evaluations": 100,
+  "cached_initial_points": 29,
+  "GP_MPM_iterations": 200,
+  "new_production_model_evaluations": 300,
+  "epsilon": 0.5,
+  "gamma": 0.5,
+  "regions": 1,
+  "local_test_points": 200,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 204 Stepping 2, GenuineIntel"
+}
