@@ -1,0 +1,3 @@
+-r requirements.txt
+nbformat>=5
+nbclient>=0.10

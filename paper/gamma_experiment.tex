@@ -1,0 +1,77 @@
+% Standalone manuscript fragment; requires booktabs and amsmath.
+\section{Mean-response constraints in a microservice application}
+\label{sec:gamma-experiment}
+
+We consider the GAMMA microservice benchmark, which records RPC traces under
+controlled offered workloads and resource interference. The behavioral
+observable is the mean response time of a specified request class and call
+graph as a function of the offered workload. Conditioning on the request class
+and graph keeps the observable fixed when comparing parameters or workloads.
+For a finite workload set $\Lambda$, let $m_\theta(\lambda)$ denote the detailed
+model's mean response and let $m_{\mathrm{ref}}(\lambda)$ be a reference curve.
+The admissible behavior is
+\[
+ \left|m_\theta(\lambda)-m_{\mathrm{ref}}(\lambda)\right|
+ \leq \tau(\lambda), \qquad \lambda\in\Lambda.
+\]
+An enclosure $[\ell_\theta(\lambda),u_\theta(\lambda)]$ certifies this condition
+when it is contained in the reference tolerance interval at every workload.
+The restricted inference target is the detailed posterior conditioned on this
+certified parameter set. Its guarantees concern the retained behavior rather
+than equality with the unrestricted posterior.
+
+\paragraph{Measured response curves.}
+A preliminary extraction uses compose requests with call-graph identifier 1
+from three version-1 GAMMA runs at 200, 400, and 800 offered requests per second.
+The paired matrices contain 86,544 request rows in total and share a 30-node RPC
+graph. The root-span duration gives the measured response time. The source
+exporter records timestamps and durations in microseconds. Inclusive RPC
+spans are not interpreted as intrinsic service demands.
+Requests crossing a logged interference boundary within a five-second guard
+are excluded. We aggregate into ten-second windows, excluding windows with
+mixed regimes and the first and last observed windows of each run.
+Outside the logged interference intervals, the resulting request-weighted
+means are shown in Table~\ref{tab:gamma-pilot}.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{rrr}
+\toprule
+Offered requests/s & Retained requests & Mean response (ms) \\
+\midrule
+200 & 8,278 & 20.364 \\
+400 & 14,238 & 20.884 \\
+800 & 27,930 & 25.528 \\
+\bottomrule
+\end{tabular}
+\caption{Descriptive root-span means for compose call graph 1 outside logged
+injections. Each workload uses one run; these values do not provide uncertainty
+bounds or establish stationarity.}
+\label{tab:gamma-pilot}
+\end{table}
+
+As a window-sensitivity check, equal-duration intervals ending five seconds
+before the first injection yield means of $(20.038,21.166,24.160)$ ms for
+60-second intervals, $(20.064,20.987,24.652)$ ms for 120-second intervals, and
+$(19.950,20.617,24.711)$ ms for 240-second intervals, in ascending workload order.
+The ordering persists under this phase alignment; these observations alone do
+not establish completion of warm-up or stationarity.
+
+\paragraph{Inference comparison.}
+The comparison uses the same detailed likelihood, prior, initial ensemble and
+sampler settings for unrestricted and behavior-restricted inference. Screening
+occurs before detailed likelihood evaluation. Construction of the behavioral
+bounds, reference estimation, initial-ensemble selection, and screening are
+included in the total cost. Measurements include detailed likelihood calls,
+wall time, retained posterior mass, target-specific mixing diagnostics, and
+behavior violations on held-out runs or chronological blocks. Reference fitting
+and validation use disjoint blocks, and injection regimes are evaluated
+separately. Such validation tests the model on measured data; a mathematical
+certificate applies to the specified model and its assumed enclosure validity.
+Guarantees beyond the finite workload grid require additional regularity and
+between-grid bounds.
+
+% Dataset: https://doi.org/10.34740/kaggle/dsv/7638732
+% Paper: https://www3.cs.stonybrook.edu/~anshul/www24_gamma.pdf
+% Extraction and exact source hashes: examples/queueing/gamma/sample_manifest.json
+% This fragment reports descriptive measurements, not completed inference trials.

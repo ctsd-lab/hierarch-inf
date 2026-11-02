@@ -17,6 +17,11 @@ detailed model MCMC proposals before the expensive likelihood evaluation.
 | [Hierarchical inference of a mechanistic model](examples/Hierarchical%20inference%20of%20a%20mechanistic%20model.ipynb) | High-level to 38-state inference, GP_hm (high-level to mechanistic), and the associated paper figures. |
 | [Model construction](examples/Model%20construction.ipynb) | BioCRNpyler construction and AutoReduce reduction of all three gene expression model levels, with SBML export. |
 
+The [Sutton–Jordan queueing application setup](examples/queueing/README.md)
+records the paper's Cloudstone and missing-queue examples and supplies tested
+complete-event transforms. It does not yet reproduce those experiments or choose
+the contract/low-cost/detailed-model hierarchy.
+
 ## Installation
 
 Use Python 3.12. From the repository root:

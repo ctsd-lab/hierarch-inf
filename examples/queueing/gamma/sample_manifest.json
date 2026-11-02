@@ -1,0 +1,176 @@
+{
+  "dataset_doi": "https://doi.org/10.34740/kaggle/dsv/7638732",
+  "dataset_version": 1,
+  "license": "Apache-2.0",
+  "scope": "compose request graph 1 only; three distinct experimental runs",
+  "timestamp_unit": "us",
+  "duration_unit": "us",
+  "units_source": "https://github.com/PACELab/GAMMA/blob/406109b0d9946f54163c149b672780df6957d5c0/third-party/jaeger-1.8/model/converter/json/from_domain.go#L71-L72",
+  "extraction_source": "https://github.com/PACELab/GAMMA/blob/406109b0d9946f54163c149b672780df6957d5c0/bmeg_scripts/create_dataset.py",
+  "runs": [
+    {
+      "run_id": "cpu_aug12_25min_200_0",
+      "request_type": "compose",
+      "graph_id": 1,
+      "directory": "cpu_aug12_25min_200_0"
+    },
+    {
+      "run_id": "cpu_aug9_25min_400_3",
+      "request_type": "compose",
+      "graph_id": 1,
+      "directory": "cpu_aug9_25min_400_3"
+    },
+    {
+      "run_id": "cpu_aug18_25min_800_0",
+      "request_type": "compose",
+      "graph_id": 1,
+      "directory": "cpu_aug18_25min_800_0"
+    }
+  ],
+  "files": [
+    {
+      "path": "cpu_aug12_25min_200_0/userv8_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fuserv8_phases?datasetVersionNumber=1",
+      "sha256": "ab17e03898d6926ce88a28c00cab4e0e4a838255996d191b59588ea0c175c90d",
+      "uncompressed_bytes": 412
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/userv2_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fuserv2_phases?datasetVersionNumber=1",
+      "sha256": "ee20b715390b1cd11f4f91f8472158817cd80719e24f776659769a9db004675f",
+      "uncompressed_bytes": 413
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/args.txt",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fargs.txt?datasetVersionNumber=1",
+      "sha256": "71a50777d6f15822061c911219c54a7edc0091dc5b8446b46bd2d08f16cd9da7",
+      "uncompressed_bytes": 422
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/compose_service_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fprocessed_traces%2Fcompose_service_time_1.csv?datasetVersionNumber=1",
+      "sha256": "a4e248be7287711cac482ac2b0e80b5f1b0339e28126fe38e08eb9271eaa8c89",
+      "uncompressed_bytes": 2321343
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/userv3_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fuserv3_phases?datasetVersionNumber=1",
+      "sha256": "23c38cb7a0f0cdc116802ce3fc1c107229bd3e91b02f8134b9f32d436ff148d4",
+      "uncompressed_bytes": 413
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/compose_graph_paths_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fprocessed_traces%2Fcompose_graph_paths_1?datasetVersionNumber=1",
+      "sha256": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d",
+      "uncompressed_bytes": 232
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/compose_ids_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fprocessed_traces%2Fcompose_ids_1?datasetVersionNumber=1",
+      "sha256": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+      "uncompressed_bytes": 1117
+    },
+    {
+      "path": "cpu_aug12_25min_200_0/compose_rps_start_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug12_25min_200_0%2Fprocessed_traces%2Fcompose_rps_start_time_1.csv?datasetVersionNumber=1",
+      "sha256": "0b8efe28924bfa1d51a459c94089fc9acbb46de27d72560e39a568dc928740a5",
+      "uncompressed_bytes": 7807650
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/userv8_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fuserv8_phases?datasetVersionNumber=1",
+      "sha256": "959be5e5e20b877a7ed4296c9d0ac2dac7fbf2342b4ad6db321639d48524a871",
+      "uncompressed_bytes": 275
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/userv2_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fuserv2_phases?datasetVersionNumber=1",
+      "sha256": "1ac3723c42d52cda1842137120b4f9634eaadfca1f8003ea70d41d698a12e326",
+      "uncompressed_bytes": 275
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/args.txt",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fargs.txt?datasetVersionNumber=1",
+      "sha256": "fbe29362fec707e3c9f9a21868762243af595c9c7b4fe8d64bb2ea115feba9a8",
+      "uncompressed_bytes": 395
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/compose_service_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fprocessed_traces%2Fcompose_service_time_1.csv?datasetVersionNumber=1",
+      "sha256": "ea28c1c670b31d01ecbc79ef22f912ff2993a7c7fb710e22412baead4bf7e21d",
+      "uncompressed_bytes": 7414800
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/userv3_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fuserv3_phases?datasetVersionNumber=1",
+      "sha256": "1e98bc5f0dfff69e6b46ec5f4af5ae25827930aaaa66828c6c716725f6d289c5",
+      "uncompressed_bytes": 276
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/compose_graph_paths_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fprocessed_traces%2Fcompose_graph_paths_1?datasetVersionNumber=1",
+      "sha256": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d",
+      "uncompressed_bytes": 232
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/compose_ids_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fprocessed_traces%2Fcompose_ids_1?datasetVersionNumber=1",
+      "sha256": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+      "uncompressed_bytes": 1117
+    },
+    {
+      "path": "cpu_aug18_25min_800_0/compose_rps_start_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug18_25min_800_0%2Fprocessed_traces%2Fcompose_rps_start_time_1.csv?datasetVersionNumber=1",
+      "sha256": "f777cf8ac901694b94dacf431f87703eb0d36998eb77a3490f44f9992e1d845e",
+      "uncompressed_bytes": 24393177
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/userv8_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fuserv8_phases?datasetVersionNumber=1",
+      "sha256": "ddc9c4052ee15e2d05faa1bb5787dde71601e2ff88f92ae1159dad45d619206d",
+      "uncompressed_bytes": 413
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/userv2_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fuserv2_phases?datasetVersionNumber=1",
+      "sha256": "bbc84f6a2f517c4d17df78f7a59bd49999541ee8852b0278286f42f1f7e17ce3",
+      "uncompressed_bytes": 410
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/args.txt",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fargs.txt?datasetVersionNumber=1",
+      "sha256": "a89302004e43f1f5deb798d9749685d54c5d0824be6c463f0cac7b49b112389d",
+      "uncompressed_bytes": 421
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/compose_service_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fprocessed_traces%2Fcompose_service_time_1.csv?datasetVersionNumber=1",
+      "sha256": "58fbdbf0f17e1b540603b5589b6512fba4c3637437ad9ed311c109fa38e2ee43",
+      "uncompressed_bytes": 3576432
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/userv3_phases",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fuserv3_phases?datasetVersionNumber=1",
+      "sha256": "c5a857d415e747998bfbb848d2f42987bf9b140e5a94b0b9d63ed9c936a209aa",
+      "uncompressed_bytes": 413
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/compose_graph_paths_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fprocessed_traces%2Fcompose_graph_paths_1?datasetVersionNumber=1",
+      "sha256": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d",
+      "uncompressed_bytes": 232
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/compose_ids_1",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fprocessed_traces%2Fcompose_ids_1?datasetVersionNumber=1",
+      "sha256": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+      "uncompressed_bytes": 1117
+    },
+    {
+      "path": "cpu_aug9_25min_400_3/compose_rps_start_time_1.csv",
+      "source_url": "https://www.kaggle.com/api/v1/datasets/download/gagansomashekar/microservices-bottleneck-detection-dataset/raw_dataset%2Fcpu_aug9_25min_400_3%2Fprocessed_traces%2Fcompose_rps_start_time_1.csv?datasetVersionNumber=1",
+      "sha256": "886459725ecfa26b3c919be2554d91ee8c49c2435460d52d714437d5bcb07009",
+      "uncompressed_bytes": 12023400
+    }
+  ]
+}

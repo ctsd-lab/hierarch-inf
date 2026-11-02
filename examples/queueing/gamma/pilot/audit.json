@@ -1,0 +1,343 @@
+{
+  "dataset_doi": "https://doi.org/10.34740/kaggle/dsv/7638732",
+  "dataset_version": 1,
+  "request_scope": "compose request graph 1 only; three distinct experimental runs",
+  "window_seconds": 10.0,
+  "transition_guard_seconds": 5.0,
+  "baseline_seconds": [
+    60.0,
+    120.0,
+    240.0
+  ],
+  "runs": [
+    {
+      "run_id": "cpu_aug12_25min_200_0",
+      "offered_rps": 200,
+      "arguments": {
+        "experiment_name": "realistic_aug12_25min",
+        "rps": [
+          200
+        ],
+        "starting_sequence": 0,
+        "config_file": null,
+        "overwrite_experiment_folder": false,
+        "experiment_duration": 1500,
+        "warm_up_duration": 300,
+        "bottlenecked_nodes": [
+          "userv2",
+          "userv3",
+          "userv8"
+        ],
+        "interference_percentage": [
+          75,
+          99,
+          65
+        ],
+        "phases": [
+          240,
+          300,
+          120,
+          120,
+          360,
+          240
+        ]
+      },
+      "phase_intervals": [
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692056188.0015988,
+          "end": 1692056489.053895
+        },
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692056609.0758753,
+          "end": 1692056730.0923846
+        },
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1692057090.1114724,
+          "end": 1692057331.1394718
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692056188.0100782,
+          "end": 1692056489.0542982
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692056609.0836775,
+          "end": 1692056730.098581
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1692057090.1250908,
+          "end": 1692057331.1386733
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692056188.0514112,
+          "end": 1692056489.0657978
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692056609.084064,
+          "end": 1692056730.093114
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1692057090.1125584,
+          "end": 1692057331.1371903
+        }
+      ],
+      "topology_sha256": "f3ec43336d309ad91c009ed23f48e909e12760bfdcd718605059256875e36697",
+      "quality": {
+        "request_rows": 15279,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 1849,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "0b8efe28924bfa1d51a459c94089fc9acbb46de27d72560e39a568dc928740a5",
+          "compose_service_time_1.csv": "a4e248be7287711cac482ac2b0e80b5f1b0339e28126fe38e08eb9271eaa8c89",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      }
+    },
+    {
+      "run_id": "cpu_aug9_25min_400_3",
+      "offered_rps": 400,
+      "arguments": {
+        "experiment_name": "realistic_aug9_25min",
+        "rps": [
+          400
+        ],
+        "starting_sequence": 3,
+        "config_file": null,
+        "overwrite_experiment_folder": false,
+        "experiment_duration": 1500,
+        "warm_up_duration": 300,
+        "bottlenecked_nodes": [
+          "userv2",
+          "userv3",
+          "userv8"
+        ],
+        "interference_percentage": [
+          75,
+          99,
+          65
+        ],
+        "phases": [
+          240,
+          300,
+          120,
+          120,
+          360,
+          240
+        ]
+      },
+      "phase_intervals": [
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1691700533.288666,
+          "end": 1691700834.311536
+        },
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1691700954.3414426,
+          "end": 1691701075.367254
+        },
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1691701435.3999825,
+          "end": 1691701676.418407
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1691700533.301085,
+          "end": 1691700834.3120937
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1691700954.3585033,
+          "end": 1691701075.3681996
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1691701435.4078777,
+          "end": 1691701676.4202752
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1691700533.3088195,
+          "end": 1691700834.3329048
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1691700954.3535576,
+          "end": 1691701075.3677237
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.65,
+          "start": 1691701435.413249,
+          "end": 1691701676.4235969
+        }
+      ],
+      "topology_sha256": "f3ec43336d309ad91c009ed23f48e909e12760bfdcd718605059256875e36697",
+      "quality": {
+        "request_rows": 23529,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 17,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "886459725ecfa26b3c919be2554d91ee8c49c2435460d52d714437d5bcb07009",
+          "compose_service_time_1.csv": "58fbdbf0f17e1b540603b5589b6512fba4c3637437ad9ed311c109fa38e2ee43",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      }
+    },
+    {
+      "run_id": "cpu_aug18_25min_800_0",
+      "offered_rps": 800,
+      "arguments": {
+        "experiment_name": "realistic_aug18_25min",
+        "rps": [
+          800
+        ],
+        "starting_sequence": 0,
+        "config_file": null,
+        "overwrite_experiment_folder": false,
+        "experiment_duration": 1500,
+        "warm_up_duration": 300,
+        "bottlenecked_nodes": [
+          "userv2",
+          "userv3",
+          "userv8"
+        ],
+        "interference_percentage": [
+          75,
+          99
+        ],
+        "phases": [
+          240,
+          300,
+          30,
+          240
+        ]
+      },
+      "phase_intervals": [
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692827491.7781062,
+          "end": 1692827792.7972183
+        },
+        {
+          "host": "userv2",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692827822.8116503,
+          "end": 1692828063.827913
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692827491.7867808,
+          "end": 1692827792.7982607
+        },
+        {
+          "host": "userv3",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692827822.8185709,
+          "end": 1692828063.8285837
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.75,
+          "start": 1692827491.7921634,
+          "end": 1692827792.8048337
+        },
+        {
+          "host": "userv8",
+          "kind": "cpu",
+          "measure": 0.99,
+          "start": 1692827822.8236303,
+          "end": 1692828063.830901
+        }
+      ],
+      "topology_sha256": "f3ec43336d309ad91c009ed23f48e909e12760bfdcd718605059256875e36697",
+      "quality": {
+        "request_rows": 47736,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 30682,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "f777cf8ac901694b94dacf431f87703eb0d36998eb77a3490f44f9992e1d845e",
+          "compose_service_time_1.csv": "ea28c1c670b31d01ecbc79ef22f912ff2993a7c7fb710e22412baead4bf7e21d",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      }
+    }
+  ],
+  "total_request_rows": 86544,
+  "result_type": "observed descriptive means; no inference speedup experiment",
+  "phase_scope": "outside all logged injections versus exact logged treatment; transition and edge windows excluded from curves",
+  "units_source": "https://github.com/PACELab/GAMMA/blob/406109b0d9946f54163c149b672780df6957d5c0/third-party/jaeger-1.8/model/converter/json/from_domain.go#L71-L72",
+  "extraction_source": "https://github.com/PACELab/GAMMA/blob/406109b0d9946f54163c149b672780df6957d5c0/bmeg_scripts/create_dataset.py"
+}

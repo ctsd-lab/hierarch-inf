@@ -1,0 +1,87 @@
+{
+  "status": "source_inventory_not_runnable_configuration",
+  "paper": "https://arxiv.org/abs/1001.3355v3",
+  "author_code": "https://github.com/casutton/bayes-qnet/tree/0fff4b38394e47b02c0b4f0a4e433049b78fa09c",
+  "cloudstone": {
+    "section": 5,
+    "tasks": 2663,
+    "jobs": 7989,
+    "duration_seconds": 450,
+    "thin_instances": 10,
+    "database_instances": 1,
+    "data_status": "original_trace_not_supplied_or_located",
+    "local_trace_path": null,
+    "trace_format": null
+  },
+  "experiments": {
+    "cloudstone_prediction": {
+      "section": 6,
+      "data": "cloudstone",
+      "training_window_seconds": [0, 100],
+      "evaluation_window_seconds": [350, 450],
+      "response_time_aggregation_seconds": 5,
+      "estimation": "maximum_likelihood_complete_data",
+      "service_distribution": "exponential",
+      "queueing_models": [
+        "single_queue_single_processor_RSS",
+        "network_RSS",
+        "single_queue_three_processor_FCFS",
+        "network_PS"
+      ],
+      "regression_baselines": ["linear", "quadratic", "power_law"],
+      "metric": "RMSE_mean_response_time",
+      "execution_status": "not_implemented"
+    },
+    "cloudstone_diagnosis": {
+      "section": 7,
+      "data": "cloudstone",
+      "queue_discipline": "PS",
+      "thin_queues": 10,
+      "database_queues": 1,
+      "omitted_physical_components": ["apache", "load_balancer", "internal_network"],
+      "service_distribution": "exponential",
+      "observation_scheme_section": "3.1",
+      "observed_task_fractions": [0.25, 0.5, 1.0],
+      "parameter_estimation": "maximum_likelihood_stochastic_EM",
+      "latent_event_inference": "slice_sampling_section_4",
+      "evaluation_time_bins": 50,
+      "repetitions_per_incomplete_fraction": 10,
+      "baselines": ["Wait_equals_zero", "linear_waiting_time_regression"],
+      "regression_workload_window_seconds": 0.5,
+      "metric": "RMSE_binned_tier_mean_service_time_against_complete_data_reconstruction",
+      "execution_status": "not_implemented"
+    },
+    "synthetic_missing_queue_selection": {
+      "section": 8,
+      "arrival_process": "homogeneous_Poisson",
+      "arrival_rate": 1.0,
+      "work_queues": 5,
+      "work_service_distribution": "exponential",
+      "work_mean_service_time": 2.5,
+      "bottleneck_utilizations": [0.001, 0.1, 0.25, 0.5, 0.75],
+      "tasks_per_dataset": 100,
+      "sampler_iterations": 5000,
+      "dataset_repetitions": 5,
+      "pairwise_alternative_models": 10,
+      "reported_test_level": 0.025,
+      "parameter_estimation": "Bayesian_resampling",
+      "reported_prior": "product_q(1/theta_q), exponential rates theta_q, improper",
+      "baseline": "LARS",
+      "queue_discipline": null,
+      "generator_topology": null,
+      "unresolved": [
+        "queue_discipline_not_specified_in_experiment_text",
+        "generator_topology_Figure_5b_versus_5c_conflict"
+      ],
+      "execution_status": "blocked_pending_source_reconciliation"
+    }
+  },
+  "hierarchical_extension": {
+    "method_paper": "https://arxiv.org/abs/2610.30683",
+    "contract_role": null,
+    "low_cost_model": null,
+    "detailed_model_role": null,
+    "behavioral_output_and_discrepancy": null,
+    "status": "design_discussion_required"
+  }
+}
