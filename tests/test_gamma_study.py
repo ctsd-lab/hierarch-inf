@@ -62,3 +62,9 @@ def test_prepare_checks_provenance_before_reading(tmp_path):
     (source / "sample.csv").write_text("corrupted")
     with pytest.raises(ValueError, match="checksum"):
         study.prepare(manifest(), tmp_path, tmp_path / "out", guard_seconds=5, window_seconds=10)
+
+
+def test_prepare_rejects_unlisted_consumed_input(tmp_path):
+    m = {"files": [], "runs": [{"directory": "run", "request_type": "compose", "graph_id": 1}]}
+    with pytest.raises(ValueError, match="absent from manifest"):
+        study.prepare(m, tmp_path, tmp_path / "out", guard_seconds=5, window_seconds=10)

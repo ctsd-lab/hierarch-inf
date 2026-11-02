@@ -85,21 +85,26 @@ def prepare(manifest, root, output, *, guard_seconds, window_seconds):
         path = safe_path(root, entry["path"])
         if path.stat().st_size != entry["uncompressed_bytes"] or file_sha256(path) != entry["sha256"]:
             raise ValueError(f"source checksum mismatch: {path}")
+    verified_paths = {safe_path(root, e["path"]) for e in manifest["files"]}
+    def verified(path):
+        if path.resolve() not in verified_paths:
+            raise ValueError(f"consumed input absent from manifest: {path}")
+        return path
     windows, audits = [], []
     for spec in manifest["runs"]:
         directory = safe_path(root, spec["directory"])
         request, graph = spec["request_type"], spec["graph_id"]
-        args = load_run_arguments(directory / "args.txt")
+        args = load_run_arguments(verified(directory / "args.txt"))
         hosts = args.get("bottlenecked_nodes")
         if not isinstance(hosts, list) or not hosts:
             raise ValueError("selected interference runs must list their injected hosts")
-        phases = [p for host in hosts for p in read_phase_log(directory / (host + "_phases"), host=host)]
+        phases = [p for host in hosts for p in read_phase_log(verified(directory / (host + "_phases")), host=host)]
         if any(not any(p.host == host for p in phases) for host in hosts):
             raise ValueError("every injected host requires complete phase entries")
         batch = load_gamma_pair(
-            directory / f"{request}_rps_start_time_{graph}.csv",
-            directory / f"{request}_service_time_{graph}.csv",
-            directory / f"{request}_ids_{graph}", directory / f"{request}_graph_paths_{graph}",
+            verified(directory / f"{request}_rps_start_time_{graph}.csv"),
+            verified(directory / f"{request}_service_time_{graph}.csv"),
+            verified(directory / f"{request}_ids_{graph}"), verified(directory / f"{request}_graph_paths_{graph}"),
             timestamp_unit=manifest["timestamp_unit"], duration_unit=manifest["duration_unit"],
         )
         topology = hashlib.sha256(json.dumps([batch.node_ids, batch.edges], sort_keys=True).encode()).hexdigest()
