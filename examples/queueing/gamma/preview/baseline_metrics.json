@@ -1,0 +1,38 @@
+{
+  "parameters_seconds": [
+    0.018222376753382865,
+    0.008127207482150792
+  ],
+  "metrics": [
+    {
+      "split": "train",
+      "windows": 22,
+      "requests": 6178,
+      "observed_mean_ms": 23.66884234380058,
+      "predicted_mean_ms": 23.668842343800588,
+      "weighted_MAE_ms": 0.4558603967316715,
+      "weighted_RMSE_ms": 0.6112794578332412,
+      "constant_MAE_ms": 1.727506839974886
+    },
+    {
+      "split": "heldout_time",
+      "windows": 19,
+      "requests": 2624,
+      "observed_mean_ms": 22.465865091463414,
+      "predicted_mean_ms": 22.397481816621912,
+      "weighted_MAE_ms": 0.7484457697299954,
+      "weighted_RMSE_ms": 1.0542645922230385,
+      "constant_MAE_ms": 2.2555424734403746
+    },
+    {
+      "split": "heldout_workload",
+      "windows": 13,
+      "requests": 2378,
+      "observed_mean_ms": 20.620373423044573,
+      "predicted_mean_ms": 21.473259746243183,
+      "weighted_MAE_ms": 1.0996445824449084,
+      "weighted_RMSE_ms": 1.2119815195916623,
+      "constant_MAE_ms": 3.048468920756007
+    }
+  ]
+}

@@ -1,5 +1,21 @@
 # Mean-response constraints on GAMMA
 
+## Visual baseline review
+
+Open [the executed baseline notebook](../gamma_baseline.ipynb). Seven figures show
+the RPC graph, phase-aligned measurements, request coverage, response distributions,
+fitted predictions and held-out errors. Compact derived inputs are included in
+`notebook_data/`; the notebook runs without the raw download.
+
+The training-only affine aggregate fit predicts **21.473 ms** at the held-out
+400 RPS workload versus an observed weighted mean of **20.620 ms**. Its weighted
+window-mean MAE is **1.100 ms** there and **0.748 ms** on later-time endpoint
+workload holdouts. These are exploratory prediction errors, not a certificate
+or a fitted graph-aware queueing model. No long inference was run.
+
+![Training-only predictions and held-out observations](preview/04_baseline_prediction.png)
+
+
 The experiment studies posterior restriction subject to preservation of the mean
 response curve across offered workloads. Its target is the detailed-model
 posterior conditioned on a certified behavioral set, not the original posterior.
@@ -129,3 +145,12 @@ or extrapolation empirically; a grid certificate covers only its stated grid.
 The current pilot selects no queue discipline, service law, likelihood,
 reference estimator or tolerance magnitude. The executable comparison accepts
 those choices rather than silently defining a scientific model.
+
+### Notebook execution environment
+
+The committed notebook was executed cell-by-cell with IPython in a fresh process;
+all seven figures are actual captured outputs. Local Jupyter kernel sockets were
+blocked by the execution sandbox, so `examples/queueing/execute_gamma_notebook.py`
+provides the in-process execution path (Matplotlib Agg plus rich PNG display).
+A normal Jupyter environment can use `nbconvert --execute` instead. Neither path
+runs posterior sampling. Install `requirements-notebook.txt` first.

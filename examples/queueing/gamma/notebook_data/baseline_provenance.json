@@ -1,0 +1,95 @@
+{
+  "source_manifest_sha256": "6bf9db59a20fad46b916349908abe06d721896d4de3f0fcf66efe7ea63119927",
+  "runs": [
+    {
+      "run_id": "cpu_aug12_25min_200_0",
+      "quality": {
+        "request_rows": 15279,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 1849,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "0b8efe28924bfa1d51a459c94089fc9acbb46de27d72560e39a568dc928740a5",
+          "compose_service_time_1.csv": "a4e248be7287711cac482ac2b0e80b5f1b0339e28126fe38e08eb9271eaa8c89",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      },
+      "first_injection_epoch_seconds": 1692056188.0015988,
+      "fitting_window_seconds": [
+        -245,
+        -5
+      ],
+      "nonempty_windows": 24,
+      "empty_windows": 0,
+      "retained_requests": 2589,
+      "edge_crossing_requests": 3
+    },
+    {
+      "run_id": "cpu_aug9_25min_400_3",
+      "quality": {
+        "request_rows": 23529,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 17,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "886459725ecfa26b3c919be2554d91ee8c49c2435460d52d714437d5bcb07009",
+          "compose_service_time_1.csv": "58fbdbf0f17e1b540603b5589b6512fba4c3637437ad9ed311c109fa38e2ee43",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      },
+      "first_injection_epoch_seconds": 1691700533.288666,
+      "fitting_window_seconds": [
+        -245,
+        -5
+      ],
+      "nonempty_windows": 13,
+      "empty_windows": 11,
+      "retained_requests": 2378,
+      "edge_crossing_requests": 2
+    },
+    {
+      "run_id": "cpu_aug18_25min_800_0",
+      "quality": {
+        "request_rows": 47736,
+        "rpc_nodes": 30,
+        "rows_with_child_start_before_root": 30682,
+        "zero_root_duration_rows": 0,
+        "input_rows_chronological": false,
+        "timestamp_unit": "us",
+        "duration_unit": "us",
+        "latency_semantics": "root inclusive response duration",
+        "request_identity": "source row index; release does not supply trace IDs in these files",
+        "source_sha256": {
+          "compose_rps_start_time_1.csv": "f777cf8ac901694b94dacf431f87703eb0d36998eb77a3490f44f9992e1d845e",
+          "compose_service_time_1.csv": "ea28c1c670b31d01ecbc79ef22f912ff2993a7c7fb710e22412baead4bf7e21d",
+          "compose_ids_1": "0e0078660bf589ab9a3ec769eb66cbab0735f9af054d32fc552a3a7cff37bebc",
+          "compose_graph_paths_1": "5a8843e4e36d7341cfc2c67cdae6ae86684aa13faa8ad1a3adf1327b776c982d"
+        }
+      },
+      "first_injection_epoch_seconds": 1692827491.7781062,
+      "fitting_window_seconds": [
+        -245,
+        -5
+      ],
+      "nonempty_windows": 17,
+      "empty_windows": 7,
+      "retained_requests": 6213,
+      "edge_crossing_requests": 14
+    }
+  ],
+  "fit_rule": "200 and800 RPS: first120 seconds train; last120 seconds temporal holdout;400 RPS fully held out",
+  "observation": "Ten-second request-weighted root-span means; edge-crossing requests excluded",
+  "histogram_scope": "All observed run requests by logged regime; descriptive only, not fitting input"
+}

@@ -1,0 +1,461 @@
+[
+  {
+    "run_id": "cpu_aug12_25min_200_0",
+    "nodes": {
+      "0": "nginx-web-server_/wrk2-api/post/compose",
+      "1": "nginx-web-server_/wrk2-api/post/compose",
+      "2": "nginx-web-server_ComposePost",
+      "3": "media-service_UploadMedia",
+      "4": "text-service_UploadText",
+      "5": "unique-id-service_UploadUniqueId",
+      "6": "user-service_UploadUserWithUserId",
+      "7": "compose-post-service_UploadMedia",
+      "8": "compose-post-service_UploadText",
+      "9": "url-shorten-service_UploadUrls",
+      "10": "user-mention-service_UploadUserMentions",
+      "11": "compose-post-service_UploadUniqueId",
+      "12": "compose-post-service_UploadCreator",
+      "13": "compose-post-service_RedisHashSet",
+      "14": "compose-post-service_RedisHashSet",
+      "15": "post-storage-service_StorePost",
+      "16": "user-timeline-service_WriteUserTimeline",
+      "17": "write-home-timeline-service_FanoutHomeTimelines",
+      "18": "compose-post-service_UploadUrls",
+      "19": "compose-post-service_UploadUserMentions",
+      "20": "compose-post-service_RedisHashSet",
+      "21": "compose-post-service_RedisHashSet",
+      "22": "post-storage-service_MongoInsertPost",
+      "23": "user-timeline-service_MongoInsert",
+      "24": "user-timeline-service_RedisUpdate",
+      "25": "social-graph-service_GetFollowers",
+      "26": "write-home-timeline-service_RedisUpdate",
+      "27": "compose-post-service_RedisHashSet",
+      "28": "compose-post-service_RedisHashSet",
+      "29": "social-graph-service_RedisGet"
+    },
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        6,
+        12
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        8,
+        14
+      ],
+      [
+        8,
+        15
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        18
+      ],
+      [
+        10,
+        19
+      ],
+      [
+        11,
+        20
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        15,
+        22
+      ],
+      [
+        16,
+        23
+      ],
+      [
+        16,
+        24
+      ],
+      [
+        17,
+        25
+      ],
+      [
+        17,
+        26
+      ],
+      [
+        18,
+        27
+      ],
+      [
+        19,
+        28
+      ],
+      [
+        25,
+        29
+      ]
+    ]
+  },
+  {
+    "run_id": "cpu_aug9_25min_400_3",
+    "nodes": {
+      "0": "nginx-web-server_/wrk2-api/post/compose",
+      "1": "nginx-web-server_/wrk2-api/post/compose",
+      "2": "nginx-web-server_ComposePost",
+      "3": "media-service_UploadMedia",
+      "4": "text-service_UploadText",
+      "5": "unique-id-service_UploadUniqueId",
+      "6": "user-service_UploadUserWithUserId",
+      "7": "compose-post-service_UploadMedia",
+      "8": "compose-post-service_UploadText",
+      "9": "url-shorten-service_UploadUrls",
+      "10": "user-mention-service_UploadUserMentions",
+      "11": "compose-post-service_UploadUniqueId",
+      "12": "compose-post-service_UploadCreator",
+      "13": "compose-post-service_RedisHashSet",
+      "14": "compose-post-service_RedisHashSet",
+      "15": "post-storage-service_StorePost",
+      "16": "user-timeline-service_WriteUserTimeline",
+      "17": "write-home-timeline-service_FanoutHomeTimelines",
+      "18": "compose-post-service_UploadUrls",
+      "19": "compose-post-service_UploadUserMentions",
+      "20": "compose-post-service_RedisHashSet",
+      "21": "compose-post-service_RedisHashSet",
+      "22": "post-storage-service_MongoInsertPost",
+      "23": "user-timeline-service_MongoInsert",
+      "24": "user-timeline-service_RedisUpdate",
+      "25": "social-graph-service_GetFollowers",
+      "26": "write-home-timeline-service_RedisUpdate",
+      "27": "compose-post-service_RedisHashSet",
+      "28": "compose-post-service_RedisHashSet",
+      "29": "social-graph-service_RedisGet"
+    },
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        6,
+        12
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        8,
+        14
+      ],
+      [
+        8,
+        15
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        18
+      ],
+      [
+        10,
+        19
+      ],
+      [
+        11,
+        20
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        15,
+        22
+      ],
+      [
+        16,
+        23
+      ],
+      [
+        16,
+        24
+      ],
+      [
+        17,
+        25
+      ],
+      [
+        17,
+        26
+      ],
+      [
+        18,
+        27
+      ],
+      [
+        19,
+        28
+      ],
+      [
+        25,
+        29
+      ]
+    ]
+  },
+  {
+    "run_id": "cpu_aug18_25min_800_0",
+    "nodes": {
+      "0": "nginx-web-server_/wrk2-api/post/compose",
+      "1": "nginx-web-server_/wrk2-api/post/compose",
+      "2": "nginx-web-server_ComposePost",
+      "3": "media-service_UploadMedia",
+      "4": "text-service_UploadText",
+      "5": "unique-id-service_UploadUniqueId",
+      "6": "user-service_UploadUserWithUserId",
+      "7": "compose-post-service_UploadMedia",
+      "8": "compose-post-service_UploadText",
+      "9": "url-shorten-service_UploadUrls",
+      "10": "user-mention-service_UploadUserMentions",
+      "11": "compose-post-service_UploadUniqueId",
+      "12": "compose-post-service_UploadCreator",
+      "13": "compose-post-service_RedisHashSet",
+      "14": "compose-post-service_RedisHashSet",
+      "15": "post-storage-service_StorePost",
+      "16": "user-timeline-service_WriteUserTimeline",
+      "17": "write-home-timeline-service_FanoutHomeTimelines",
+      "18": "compose-post-service_UploadUrls",
+      "19": "compose-post-service_UploadUserMentions",
+      "20": "compose-post-service_RedisHashSet",
+      "21": "compose-post-service_RedisHashSet",
+      "22": "post-storage-service_MongoInsertPost",
+      "23": "user-timeline-service_MongoInsert",
+      "24": "user-timeline-service_RedisUpdate",
+      "25": "social-graph-service_GetFollowers",
+      "26": "write-home-timeline-service_RedisUpdate",
+      "27": "compose-post-service_RedisHashSet",
+      "28": "compose-post-service_RedisHashSet",
+      "29": "social-graph-service_RedisGet"
+    },
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        6,
+        12
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        8,
+        14
+      ],
+      [
+        8,
+        15
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        18
+      ],
+      [
+        10,
+        19
+      ],
+      [
+        11,
+        20
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        15,
+        22
+      ],
+      [
+        16,
+        23
+      ],
+      [
+        16,
+        24
+      ],
+      [
+        17,
+        25
+      ],
+      [
+        17,
+        26
+      ],
+      [
+        18,
+        27
+      ],
+      [
+        19,
+        28
+      ],
+      [
+        25,
+        29
+      ]
+    ]
+  }
+]
