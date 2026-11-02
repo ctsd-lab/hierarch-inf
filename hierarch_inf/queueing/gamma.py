@@ -262,3 +262,31 @@ def load_run_arguments(path):
     if not np.isfinite(value) or value <= 0:
         raise ValueError("offered RPS must be positive and finite")
     return arguments
+
+
+def phase_aligned_baselines(batch, phases, *, durations_seconds, guard_seconds):
+    """Descriptive equal-duration windows ending before the first injection.
+
+    Only windows fully covered by the observed root-start range are returned.
+    Requests crossing either window edge are excluded. No stationarity or
+    warm-up completion is inferred from this alignment.
+    """
+    if not phases or not np.isfinite(guard_seconds) or guard_seconds < 0:
+        raise ValueError("complete phases and a finite nonnegative guard are required")
+    durations = np.asarray(durations_seconds, dtype=float)
+    if durations.ndim != 1 or np.any(~np.isfinite(durations)) or np.any(durations <= 0):
+        raise ValueError("baseline durations must be positive and finite")
+    end = min(p.start for p in phases) - guard_seconds
+    rows = []
+    for duration in durations:
+        start = end - duration
+        if start < batch.root_start_seconds.min() or end > batch.root_start_seconds.max():
+            continue
+        keep = ((batch.root_start_seconds >= start)
+                & (batch.root_start_seconds + batch.root_duration_seconds <= end))
+        values = batch.root_duration_seconds[keep]
+        if values.size:
+            rows.append({"duration_seconds": float(duration), "start_epoch_seconds": start,
+                         "end_epoch_seconds": end, "requests": int(values.size),
+                         "mean_response_seconds": float(values.mean())})
+    return rows

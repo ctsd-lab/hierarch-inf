@@ -4,6 +4,11 @@
   "request_scope": "compose request graph 1 only; three distinct experimental runs",
   "window_seconds": 10.0,
   "transition_guard_seconds": 5.0,
+  "baseline_seconds": [
+    60.0,
+    120.0,
+    240.0
+  ],
   "runs": [
     {
       "run_id": "cpu_aug12_25min_200_0",

@@ -110,3 +110,17 @@ def test_phase_intervals_cannot_overlap_or_reverse_time(tmp_path):
                  "Bottleneck of type cpu with measure 0.75 ends at 25\n")
     with pytest.raises(ValueError, match="previous phase"):
         read_phase_log(p, host="h")
+
+
+def test_equal_duration_preinjection_baselines(tmp_path):
+    from hierarch_inf.queueing.gamma import phase_aligned_baselines
+    batch = load_gamma_pair(*fixture_paths(tmp_path), timestamp_unit="us", duration_unit="us")
+    phases = [InterferencePhase("host", "cpu", .75, 4, 5)]
+    rows = phase_aligned_baselines(batch, phases, durations_seconds=[1, 2, 3], guard_seconds=1)
+    # [2,3] excludes the request at3 whose duration crosses the right boundary.
+    assert len(rows) == 2
+    assert rows[0]["requests"] == 1
+    assert rows[0]["mean_response_seconds"] == .002
+    assert rows[1]["requests"] == 2
+    with pytest.raises(ValueError):
+        phase_aligned_baselines(batch, phases, durations_seconds=[-1], guard_seconds=1)

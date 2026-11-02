@@ -16,6 +16,7 @@ import zipfile
 
 from hierarch_inf.queueing.gamma import (
     file_sha256, load_gamma_pair, load_run_arguments, read_phase_log, summarize_batch,
+    phase_aligned_baselines,
 )
 
 
@@ -78,7 +79,7 @@ def write_csv(path, rows):
         writer.writerows(rows)
 
 
-def prepare(manifest, root, output, *, guard_seconds, window_seconds):
+def prepare(manifest, root, output, *, guard_seconds, window_seconds, baseline_seconds=()):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     for entry in manifest["files"]:
@@ -90,7 +91,7 @@ def prepare(manifest, root, output, *, guard_seconds, window_seconds):
         if path.resolve() not in verified_paths:
             raise ValueError(f"consumed input absent from manifest: {path}")
         return path
-    windows, audits = [], []
+    windows, audits, baselines = [], [], []
     for spec in manifest["runs"]:
         directory = safe_path(root, spec["directory"])
         request, graph = spec["request_type"], spec["graph_id"]
@@ -114,6 +115,9 @@ def prepare(manifest, root, output, *, guard_seconds, window_seconds):
         for row in rows:
             row["topology_sha256"] = topology
         windows.extend(rows)
+        for baseline in phase_aligned_baselines(batch, phases, durations_seconds=baseline_seconds,
+                                                guard_seconds=guard_seconds):
+            baselines.append(dict(run_id=spec["run_id"], offered_rps=args["rps"][0], **baseline))
         audits.append({"run_id": spec["run_id"], "offered_rps": args["rps"][0],
                        "arguments": args, "phase_intervals": [vars(p) for p in phases],
                        "topology_sha256": topology, "quality": batch.quality})
@@ -132,11 +136,13 @@ def prepare(manifest, root, output, *, guard_seconds, window_seconds):
             ("run_id", "request_type", "graph_id", "offered_rps", "phase", "topology_sha256"), key),
             windows=len(rows), requests=requests, mean_response_seconds=total / requests,
             mean_response_raw=sum(r["mean_response_raw"] * r["requests"] for r in rows) / requests))
+    if baselines:
+        write_csv(output / "phase_aligned_baselines.csv", baselines)
     write_csv(output / "windows.csv", windows)
     write_csv(output / "curves.csv", curves)
     report = {"dataset_doi": manifest["dataset_doi"], "dataset_version": manifest["dataset_version"],
               "request_scope": manifest["scope"], "window_seconds": window_seconds,
-              "transition_guard_seconds": guard_seconds, "runs": audits,
+              "transition_guard_seconds": guard_seconds, "baseline_seconds": list(baseline_seconds), "runs": audits,
               "total_request_rows": sum(a["quality"]["request_rows"] for a in audits),
               "result_type": "observed descriptive means; no inference speedup experiment",
               "phase_scope": "outside all logged injections versus exact logged treatment; transition and edge windows excluded from curves",
@@ -154,6 +160,7 @@ def main():
     parser.add_argument("--max-total-bytes", type=int, default=100_000_000)
     parser.add_argument("--guard-seconds", type=float)
     parser.add_argument("--window-seconds", type=float)
+    parser.add_argument("--baseline-seconds", type=float, nargs="*", default=[])
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_text())
     if args.action == "download":
@@ -162,7 +169,8 @@ def main():
         if args.output_dir is None or args.guard_seconds is None or args.window_seconds is None:
             parser.error("prepare requires --output-dir, --guard-seconds and --window-seconds")
         report = prepare(manifest, args.data_dir, args.output_dir,
-                         guard_seconds=args.guard_seconds, window_seconds=args.window_seconds)
+                         guard_seconds=args.guard_seconds, window_seconds=args.window_seconds,
+                         baseline_seconds=args.baseline_seconds)
         print(json.dumps({"request_rows": report["total_request_rows"], "runs": len(report["runs"])}))
 
 

@@ -1,0 +1,728 @@
+{
+  "repository": "amazon-science/petshop-root-cause-analysis",
+  "revision": "2e96f937c4c044b8b4aad03217592cd52e66db5d",
+  "source": "https://github.com/amazon-science/petshop-root-cause-analysis",
+  "license": "CC-BY-4.0",
+  "files": [
+    {
+      "path": "dataset/high_traffic/graph.csv",
+      "sha": "93d18545fa2590718c114874b4125d1f5e4bfcaa",
+      "size": 10873
+    },
+    {
+      "path": "dataset/high_traffic/noissue/metrics.csv",
+      "sha": "71d8b48b944e33c24f70fbb2b675cf9831872708",
+      "size": 2223691
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_0/metrics.csv",
+      "sha": "16719701b4c4926cdbbd26452a6258f95d496424",
+      "size": 33607
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_0/target.json",
+      "sha": "fb03e3b9fb7025f6d10dab8e9030081427c2aed3",
+      "size": 453
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_1/metrics.csv",
+      "sha": "51795f6b437c8a447497729235cef40fda07607e",
+      "size": 33887
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_1/target.json",
+      "sha": "ac92964dc03e4ba8e51e3f3a44a76df0fce7e287",
+      "size": 453
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_10/metrics.csv",
+      "sha": "5dfb943b8f82a6ffcfa1a8ae968f81108396a21f",
+      "size": 31684
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_10/target.json",
+      "sha": "65d0a537e74333ccc0efb947455ba6ebeb491f2d",
+      "size": 306
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_11/metrics.csv",
+      "sha": "ab0eada2bade3a79881ec2a0548dbe6a4017407b",
+      "size": 34475
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_11/target.json",
+      "sha": "ec4a2ed85ecb6bec064d38c2ed1bba3f56d3147e",
+      "size": 460
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_12/metrics.csv",
+      "sha": "10e9ff0154d1ede544040ffb66d3540aab6e30b7",
+      "size": 32418
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_12/target.json",
+      "sha": "08c52251b412a5d7b4a3944c278340403451747e",
+      "size": 306
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_13/metrics.csv",
+      "sha": "32dd6df6771933dbb0fa050e0ac4d18b2108170a",
+      "size": 34163
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_13/target.json",
+      "sha": "e935951da8c4e30ac34a5011d3ccc03fcc001027",
+      "size": 460
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_14/metrics.csv",
+      "sha": "5c3b72ce3e89862438467a89101211fcca97f64a",
+      "size": 33739
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_14/target.json",
+      "sha": "10783fb5062e6bcd37546ed90c1ef42fb2964d57",
+      "size": 312
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_15/metrics.csv",
+      "sha": "92c5ca83a0ce505ff1870ab504090c6ffcbdc29c",
+      "size": 34282
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_15/target.json",
+      "sha": "ef55cd850d950fd652131ec0883370a7609b8c27",
+      "size": 312
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_16/metrics.csv",
+      "sha": "5642b4a6587884a06ea488238fb7694b88d6651d",
+      "size": 34317
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_16/target.json",
+      "sha": "89f4525ce76f2d754839ccd2d06c243f421f9f51",
+      "size": 312
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_17/metrics.csv",
+      "sha": "a470b2d5083582912dc7e76f4b3bd9bb33dcc9eb",
+      "size": 33940
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_17/target.json",
+      "sha": "07ca0b45a9a9a738092407088a5b0c228781a6ce",
+      "size": 312
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_2/metrics.csv",
+      "sha": "0f4508c9e65d759487db234abc1f9ffe164bc003",
+      "size": 34116
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_2/target.json",
+      "sha": "d9dcf0802c08cd470cdce82077d8527b9521f045",
+      "size": 453
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_3/metrics.csv",
+      "sha": "9c4597f0df5719f66a15555ceffe0e8186d1e400",
+      "size": 33989
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_3/target.json",
+      "sha": "e1cfefd521eed7adfa85f2312309c5f34cf264e6",
+      "size": 271
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_4/metrics.csv",
+      "sha": "1a6c0a05da3914ae43d07e2e2454b1e2e790d67f",
+      "size": 34343
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_4/target.json",
+      "sha": "08f5d01469d5e5f76a859b7bbf4c37a73023e3f2",
+      "size": 453
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_5/metrics.csv",
+      "sha": "866f402bb47a4271bc9c56645a790e70841e1ca6",
+      "size": 33977
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_5/target.json",
+      "sha": "d3c0456c76371a7e09b4283e389fd36f444a9e0a",
+      "size": 271
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_6/metrics.csv",
+      "sha": "d089828ea580ab6dbd5aada15e17d2ceca1c1330",
+      "size": 33917
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_6/target.json",
+      "sha": "890509321a6b3281d5fa9064a96952f0684bc989",
+      "size": 300
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_7/metrics.csv",
+      "sha": "d88e48f129d13b94688e627cb69211bce057c86f",
+      "size": 33780
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_7/target.json",
+      "sha": "00fde2d7e06d0f478b8bdd76e6d2db83ff400e63",
+      "size": 300
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_8/metrics.csv",
+      "sha": "42db1f8c3b19901fe64e30c9e8e121855cbebd3c",
+      "size": 34042
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_8/target.json",
+      "sha": "d7bf7b2273df36b015a60a98a9a1e2e884920016",
+      "size": 300
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_9/metrics.csv",
+      "sha": "83f9f633ee2733f460ee1f31b620a0736564c63f",
+      "size": 34063
+    },
+    {
+      "path": "dataset/high_traffic/test/issue_9/target.json",
+      "sha": "8280c710d55f1ab8cd0b487d90130dc8ee9ae9ed",
+      "size": 300
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_0/metrics.csv",
+      "sha": "9dfb4cbdebb5d83be723a7398e03a2da8a25948b",
+      "size": 33775
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_0/target.json",
+      "sha": "2378a2d205d98d069c7d086499a44b9448526768",
+      "size": 295
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_1/metrics.csv",
+      "sha": "276ecf72940f25d30e1f9cd3659c320142cfd0ab",
+      "size": 34153
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_1/target.json",
+      "sha": "3b2c3a45ff814fd1a8c9d7fa5a2aed6859136a80",
+      "size": 294
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_2/metrics.csv",
+      "sha": "23c3993ba5fac63f489ff49eb24c8a948f541870",
+      "size": 34515
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_2/target.json",
+      "sha": "86756edd29391731f7089d4d5609d40fdd611296",
+      "size": 294
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_3/metrics.csv",
+      "sha": "818e913f3e9a3ae1c813f71cbf5f476ad75b5fdd",
+      "size": 33541
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_3/target.json",
+      "sha": "33bb30df5561fb1258165f19e6ca170b420096b7",
+      "size": 295
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_4/metrics.csv",
+      "sha": "50c2647312c06a4cad2e5ab6c0b6f8d135cc0f64",
+      "size": 34185
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_4/target.json",
+      "sha": "f08db6b57c508a99aa66a11919b122a20456cc6d",
+      "size": 304
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_5/metrics.csv",
+      "sha": "351be0ed9cdbe03575c46d588ef2642d825a7dcb",
+      "size": 34465
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_5/target.json",
+      "sha": "84725353478377d910bc7ba0d607794f373add1a",
+      "size": 304
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_6/metrics.csv",
+      "sha": "16339799144f2e353f2a14204d4d2a6bf7f12eba",
+      "size": 34587
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_6/target.json",
+      "sha": "db8c4a42e8576f229dba3ada1c21db36df4ca8c8",
+      "size": 304
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_7/metrics.csv",
+      "sha": "af3b109b10bfbe9d772f4fe12824d829809dbb6e",
+      "size": 34548
+    },
+    {
+      "path": "dataset/high_traffic/train/issue_7/target.json",
+      "sha": "a62b7e4dbc661321592c3277e7d5d0b35d4dfee5",
+      "size": 304
+    },
+    {
+      "path": "dataset/low_traffic/graph.csv",
+      "sha": "e0406d83757f724a74ba8d995b8be834ae64e05d",
+      "size": 10047
+    },
+    {
+      "path": "dataset/low_traffic/noissue/metrics.csv",
+      "sha": "91d521464370c78c50f26b1294ab610e20b18396",
+      "size": 2095230
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_0/metrics.csv",
+      "sha": "c52bd52af9f12151169285b781997324d9752649",
+      "size": 33109
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_0/target.json",
+      "sha": "726fff6e441d283abc4d6b9ed755d332d3d7062e",
+      "size": 271
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_1/metrics.csv",
+      "sha": "234cccd4141a7324f526076b58e03f8ace2db8a0",
+      "size": 32131
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_1/target.json",
+      "sha": "348c316e0123e8ca16124d285aa989076fda1984",
+      "size": 453
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_10/metrics.csv",
+      "sha": "f641cd34845c44ebd5771129abb70d1d3217f2fb",
+      "size": 32560
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_10/target.json",
+      "sha": "51228bb8efd2dbcb770ce1f1ead5528315b80cfa",
+      "size": 312
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_11/metrics.csv",
+      "sha": "72808867c8939534b727bb455cdb9c0a4bc7a462",
+      "size": 32335
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_11/target.json",
+      "sha": "87945880faa6f1ce438d0e2e5821c1c49081fa8f",
+      "size": 312
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_12/metrics.csv",
+      "sha": "1dff888894370bb9e6bb5114defde9a0a8aa66b5",
+      "size": 30389
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_12/target.json",
+      "sha": "294e3888de3c37c350d9c9053b26bf5e6ed43127",
+      "size": 306
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_13/metrics.csv",
+      "sha": "a86cc861a4e234a0c806aea1dcabcaf3aaeaabce",
+      "size": 32437
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_13/target.json",
+      "sha": "08acfe681321825eb1da6cbd42faaf8073793c38",
+      "size": 312
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_14/metrics.csv",
+      "sha": "0ce7ba0902c34a5c6d206a4f0fba14a2cf873596",
+      "size": 33789
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_14/target.json",
+      "sha": "bc257058b8a794e1885673f82a0ab75ad661aafc",
+      "size": 460
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_15/metrics.csv",
+      "sha": "3df6c52ce16ec35808392a9460a44d04bbda78bc",
+      "size": 33323
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_15/target.json",
+      "sha": "4bee920ef39763766a4d888c467c639b5e7ab65c",
+      "size": 460
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_16/metrics.csv",
+      "sha": "0d45aa94e9d2b0f0f8d162d5601b3665ea557662",
+      "size": 31167
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_16/target.json",
+      "sha": "b9ff98833399882563efd09aa80e917e20f5f639",
+      "size": 306
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_17/metrics.csv",
+      "sha": "a3b5344d36b32a6579d45145693b1a8fe981aa4b",
+      "size": 32798
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_17/target.json",
+      "sha": "9cf9da645564c2492306ee2319cb76193e12ee0e",
+      "size": 312
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_2/metrics.csv",
+      "sha": "e504111fffe436f68d9a130877e357cf5ad247aa",
+      "size": 32626
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_2/target.json",
+      "sha": "3b699339d0fddd295f0ef46eed84a05cdc6fed43",
+      "size": 300
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_3/metrics.csv",
+      "sha": "bb9b6e5a07fba7861be949f71dd73e9e9bd4003d",
+      "size": 32482
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_3/target.json",
+      "sha": "b622b1c6f2850839efc8a1ecefb3cf610c8b3dd6",
+      "size": 300
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_4/metrics.csv",
+      "sha": "da20d0113fb7b4eff814c20eec3df6312718c79b",
+      "size": 32230
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_4/target.json",
+      "sha": "f2477443a62b6b13f2f8fb92ff9f43119d05db7b",
+      "size": 300
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_5/metrics.csv",
+      "sha": "b2134793a1c8c7aff339e77e914da21c90686dce",
+      "size": 33012
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_5/target.json",
+      "sha": "bc1d4d4c022a0856f0efbca6e21db2cc4509a88a",
+      "size": 453
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_6/metrics.csv",
+      "sha": "2b2f378b100baf595643e7a6ea97be9c371623ca",
+      "size": 32672
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_6/target.json",
+      "sha": "ee1bf1a521e09fb183ac29014d1500ad448e90a9",
+      "size": 271
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_7/metrics.csv",
+      "sha": "3105e185c33cdda801c01bc09d2d573090c2a4f4",
+      "size": 32047
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_7/target.json",
+      "sha": "c08c5e01aeec9914dd7830022bd4bdd3110da639",
+      "size": 453
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_8/metrics.csv",
+      "sha": "e505a72ac2c08490ae4e6e7bf65f393638f27a8e",
+      "size": 32974
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_8/target.json",
+      "sha": "67a3485f0227e21672b1ac1265b1b28955177b28",
+      "size": 453
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_9/metrics.csv",
+      "sha": "d219f04fa55c89fc550d6ee422e1cc2d3c0568aa",
+      "size": 32642
+    },
+    {
+      "path": "dataset/low_traffic/test/issue_9/target.json",
+      "sha": "c05092d240e43ca4ee4b0f5c790e44a969a30933",
+      "size": 300
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_0/metrics.csv",
+      "sha": "8e890f314d16a60e834e460d324206fdc2842773",
+      "size": 33244
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_0/target.json",
+      "sha": "4fa448cced45c509deb6bb45edd8899ad71d83e2",
+      "size": 295
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_1/metrics.csv",
+      "sha": "84647ab506b969dd655fefec828c5dc637be59c6",
+      "size": 33388
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_1/target.json",
+      "sha": "909a62b1aaf72cf522530c1e27d6540a0fc01870",
+      "size": 294
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_2/metrics.csv",
+      "sha": "3f8e14be412c81d2969040d0d2d13a1be685daf6",
+      "size": 32561
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_2/target.json",
+      "sha": "bded66f6fc11081ed47bfb9d92a123bc5ad414d3",
+      "size": 295
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_3/metrics.csv",
+      "sha": "fbc8a01b41af90de72554dce1bf07066fdf03473",
+      "size": 33259
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_3/target.json",
+      "sha": "8e3ede5778d52f76f6fbb128eb83c19fde9c1959",
+      "size": 294
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_4/metrics.csv",
+      "sha": "b4d3043e11c81e7654594220034e472781e4b2e7",
+      "size": 32990
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_4/target.json",
+      "sha": "91ffda586c56986c81ef360ff6f06da1d09fe176",
+      "size": 304
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_5/metrics.csv",
+      "sha": "d371d9d094bb539962dd84db695da79f4d78486c",
+      "size": 33601
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_5/target.json",
+      "sha": "08803568d2a49d1c0939ddedb0841234be3b7a18",
+      "size": 304
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_6/metrics.csv",
+      "sha": "f36743f5da43cd4cef0d2856705b51951ec28f23",
+      "size": 33016
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_6/target.json",
+      "sha": "7ad97cb8d55ca3a99d0f30ce305940a7b6918785",
+      "size": 304
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_7/metrics.csv",
+      "sha": "7b97e095dd75fee17d1324137c8e0f9dc4b2de04",
+      "size": 33504
+    },
+    {
+      "path": "dataset/low_traffic/train/issue_7/target.json",
+      "sha": "c81f22590bd31d0781b91060993be5a863806502",
+      "size": 304
+    },
+    {
+      "path": "dataset/temporal_traffic1/graph.csv",
+      "sha": "17c86dac6b239c612912afb0c66f72e34cd27b3f",
+      "size": 9621
+    },
+    {
+      "path": "dataset/temporal_traffic1/noissue/metrics.csv",
+      "sha": "fd41d4f606bcfd684c7b27cf17fa040e1e2864ef",
+      "size": 5988574
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_0/metrics.csv",
+      "sha": "7b79d833a0ae849b6f13818c0b236f4ab8fc6ae4",
+      "size": 32498
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_0/target.json",
+      "sha": "1994309a9d93f6d4bfb1d39502844498148b24ff",
+      "size": 301
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_1/metrics.csv",
+      "sha": "50df18060710c761fecc11c7d3d5189926bdc410",
+      "size": 32974
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_1/target.json",
+      "sha": "7041255b0f65af69d1139ab16c32eef40d6dd891",
+      "size": 271
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_2/metrics.csv",
+      "sha": "4d4f1de849e33c06839262335327c0fd0d4af172",
+      "size": 32129
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_2/target.json",
+      "sha": "6bca16d9a90107852b3b02d48d35768ad57080eb",
+      "size": 454
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_3/metrics.csv",
+      "sha": "f260aeb4e10cd9fb74977b7821c6cb061d73e95b",
+      "size": 30970
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_3/target.json",
+      "sha": "9d06d662947617b5e0bc863c5a66e675d14c6eba",
+      "size": 306
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_4/metrics.csv",
+      "sha": "61b9cc4fcfd30acf53dd65e125317064d5d7c6ae",
+      "size": 32716
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_4/target.json",
+      "sha": "05f965afbcd4804bf8d841da80cb53f10e57096b",
+      "size": 313
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_5/metrics.csv",
+      "sha": "ab74b7d980eb7a9afbe22e70e6e58b511ad428c0",
+      "size": 33659
+    },
+    {
+      "path": "dataset/temporal_traffic1/test/issue_5/target.json",
+      "sha": "b6d55e86af160e6516e77eb2e6fcc72030e394c0",
+      "size": 460
+    },
+    {
+      "path": "dataset/temporal_traffic1/train/issue_0/metrics.csv",
+      "sha": "9b07c3b22b7bef132e894f8b4c2ff5fb850e61ff",
+      "size": 31456
+    },
+    {
+      "path": "dataset/temporal_traffic1/train/issue_0/target.json",
+      "sha": "f709539e920bd6b9a6a7a35b2aaddfc2e058dc22",
+      "size": 295
+    },
+    {
+      "path": "dataset/temporal_traffic1/train/issue_1/metrics.csv",
+      "sha": "a2556bfc9aa72de4f62464bf5e54b7a627f5be61",
+      "size": 32013
+    },
+    {
+      "path": "dataset/temporal_traffic1/train/issue_1/target.json",
+      "sha": "b7ea28564f9c5e3fc099a13c23c003fbacea6620",
+      "size": 304
+    },
+    {
+      "path": "dataset/temporal_traffic2/graph.csv",
+      "sha": "e11ac038b6f4efc930fdec574ea1f01c2babf838",
+      "size": 9621
+    },
+    {
+      "path": "dataset/temporal_traffic2/noissue/metrics.csv",
+      "sha": "2a820ee24c206e565bcf85b82e9bb422d0bdf4fc",
+      "size": 5988574
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_0/metrics.csv",
+      "sha": "3751f63c92235154c2b766478cf14ca8d4753c4c",
+      "size": 32513
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_0/target.json",
+      "sha": "82024954a3c09b2cce5d4babeb61a327d6f76902",
+      "size": 271
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_1/metrics.csv",
+      "sha": "dd674ec01f05bb3071fe3665534604b66eeddce8",
+      "size": 33029
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_1/target.json",
+      "sha": "132aebd8bffc2deedff0e7c028f964d08cded950",
+      "size": 454
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_2/metrics.csv",
+      "sha": "d79da181fcd0e077c3a045aec84159dde06d99bc",
+      "size": 32528
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_2/target.json",
+      "sha": "470ae508b6d8b3f747031a4ed1f3b8fb45e33224",
+      "size": 301
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_3/metrics.csv",
+      "sha": "7110fc6c49a88ad8eeeaf326e982a5a9d10495c0",
+      "size": 31841
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_3/target.json",
+      "sha": "7ac55188ed76c95a7e10732b75650292dd835979",
+      "size": 460
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_4/metrics.csv",
+      "sha": "dd0755d76901b5967c1fe607ad4f8e37086b4581",
+      "size": 32987
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_4/target.json",
+      "sha": "15ff6bba04bc8c84c3a3c5f202ba33ce9a14de00",
+      "size": 313
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_5/metrics.csv",
+      "sha": "a58d0c388dd660acb97ceac89ad58f0fe272dd75",
+      "size": 31299
+    },
+    {
+      "path": "dataset/temporal_traffic2/test/issue_5/target.json",
+      "sha": "64b4e2f14d6107b94287f36f53c21020694f16be",
+      "size": 306
+    },
+    {
+      "path": "dataset/temporal_traffic2/train/issue_0/metrics.csv",
+      "sha": "d29a5cce3313c8fc9793d08c49fa10c415127e90",
+      "size": 31939
+    },
+    {
+      "path": "dataset/temporal_traffic2/train/issue_0/target.json",
+      "sha": "d57adc8931c58c7c3c1c2ddcb513d539d9734cd2",
+      "size": 295
+    },
+    {
+      "path": "dataset/temporal_traffic2/train/issue_1/metrics.csv",
+      "sha": "540bd60bdae7cb1049703af9080a3b6f7ce669d9",
+      "size": 33330
+    },
+    {
+      "path": "dataset/temporal_traffic2/train/issue_1/target.json",
+      "sha": "8b1f96500557d4ed48abb37c0d10e3f9749d95b6",
+      "size": 304
+    }
+  ]
+}

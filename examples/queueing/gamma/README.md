@@ -13,7 +13,7 @@ python -m examples.queueing.gamma_study download \
   --data-dir /path/to/gamma-small --max-total-bytes 100000000
 python -m examples.queueing.gamma_study prepare \
   --data-dir /path/to/gamma-small --output-dir /tmp/gamma-pilot \
-  --window-seconds 10 --guard-seconds 5
+  --window-seconds 10 --guard-seconds 5 --baseline-seconds 60 120 240
 ```
 
 `sample_manifest.json` pins version 1, source URLs, decoded byte lengths and
@@ -69,6 +69,23 @@ inference acceleration result. `windows.csv` retains sample counts, dispersion,
 phase and observed graph-specific rates; the latter differ from total offered RPS.
 `curves.csv` weights windows by request counts. `audit.json` records extraction,
 quality checks and treatment intervals.
+
+## Equal-duration sensitivity check
+
+`phase_aligned_baselines.csv` uses windows ending five seconds before the first
+injection in each run, excluding requests crossing either window edge. All
+windows are within the observed timestamp range. Means in milliseconds are:
+
+| Window duration | 200 RPS | 400 RPS | 800 RPS |
+|---:|---:|---:|---:|
+| 60 seconds | 20.038 | 21.166 | 24.160 |
+| 120 seconds | 20.064 | 20.987 | 24.652 |
+| 240 seconds | 19.950 | 20.617 | 24.711 |
+
+The descriptive ordering persists under equal-duration, phase-aligned windows;
+it is not solely an artifact of pooling differently sized interference-free
+periods. This check does not establish that warm-up has ended or that the runs
+are stationary. The exporter does not supply a verified common warm-up origin.
 
 ## Paired inference protocol
 
