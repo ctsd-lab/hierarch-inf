@@ -97,7 +97,7 @@ entire region accepted by the learned model.
 
 \subsection{Mean response time across workloads}
 
-Let $\lambda\in\Lambda$ denote the workload, with the remaining operating
+Let $\lambda\in\Lambda$, with $\Lambda\ne\varnothing$, denote the workload, with the remaining operating
 conditions fixed by $\mathcal A$. Let $R_{\theta,\lambda}$ denote request
 response time and define
 \[
@@ -151,8 +151,9 @@ by integration and the triangle inequality,
  \leq\tau(\lambda),\qquad\lambda\in\Lambda.
 \]
 For a finite workload grid, the guarantee applies at those workload
-values. Extending it to an interval requires a contract valid throughout
-the interval or a bound controlling the variation between grid points.
+values. Extending it to an interval requires both the contract discrepancy
+bound and the reduced-model feasibility margin throughout the interval,
+or bounds controlling their variation between grid points.
 
 The contract must bound the mean-response discrepancy. For example, a
 coupling of the detailed and reduced response times that satisfies
