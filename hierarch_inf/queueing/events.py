@@ -8,6 +8,8 @@ applying these transforms to only logged jobs is not missing-data inference.
 
 from __future__ import annotations
 
+import heapq
+
 import numpy as np
 
 
@@ -81,6 +83,71 @@ def _ps_events(arrival_times, departure_times):
     return arrivals, departures
 
 
+def ps_departures(arrival_times, service_times):
+    """Simulate an initially empty, unit-capacity processor-sharing queue.
+
+    Each active job receives rate ``1/N(t)`` as in equation (7). Services
+    are supplied deterministic requirements, with no service law assumed.
+    Input jobs may be unsorted; outputs preserve their original order.
+    Simultaneous arrivals and completions are allowed. Zero-service jobs
+    depart immediately and never consume capacity.
+
+    A virtual-service clock and completion heap give O(n log n) time and
+    O(n) storage. No network routing, inference, or contract is selected.
+    All relevant jobs must be supplied, and the queue is empty before the
+    earliest arrival. Rescale times if their range exceeds float precision.
+    """
+    arrivals, services = _paired(arrival_times, service_times, "service_times")
+    departures = np.empty_like(arrivals)
+    order = np.argsort(arrivals, kind="stable")
+    active = []
+    position = 0
+    time = 0.0
+    virtual = 0.0
+
+    while position < arrivals.size or active:
+        next_arrival = float(arrivals[order[position]]) if position < arrivals.size else np.inf
+        if not active:
+            time = next_arrival
+            virtual = 0.0  # Restart the clock on an empty queue.
+        else:
+            target = active[0][0]
+            duration = (target - virtual) * len(active)
+            completion = time + duration
+            if not np.isfinite(completion):
+                # A finite arrival may shorten this interval; overflow is
+                # fatal only when no earlier arrival remains.
+                if not np.isfinite(next_arrival):
+                    raise ValueError("Departure time overflow; rescale the input time unit.")
+            elif duration > 0.0 and completion == time:
+                raise ValueError("Insufficient time precision; rescale the input times.")
+
+            if completion <= next_arrival:
+                time, virtual = completion, target
+                while active and active[0][0] == target:
+                    _, index = heapq.heappop(active)
+                    departures[index] = time
+                continue
+            virtual += (next_arrival - time) / len(active)
+            time = next_arrival
+
+        # Process the entire arrival batch before advancing time again.
+        while position < arrivals.size and arrivals[order[position]] == time:
+            index = int(order[position])
+            service = float(services[index])
+            if service == 0.0:
+                departures[index] = time
+            else:
+                target = virtual + service
+                if not np.isfinite(target):
+                    raise ValueError("Virtual service overflow; rescale the input times.")
+                if target == virtual:
+                    raise ValueError("Insufficient service precision; rescale the input times.")
+                heapq.heappush(active, (target, index))
+            position += 1
+    return departures
+
+
 def ps_service_times(arrival_times, departure_times):
     """Invert complete processor-sharing events using ``s[e] = integral 1/N(t) dt``.
 
@@ -134,3 +201,4 @@ def ps_log_jacobian(arrival_times, departure_times):
         - np.searchsorted(np.sort(departures), departures, side="left")
     )
     return float(-np.log(number_before_departure).sum())
+

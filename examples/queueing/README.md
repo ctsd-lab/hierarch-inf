@@ -24,6 +24,9 @@ paths: running the transforms on only logged jobs would give wrong occupancies.
 
 - `fcfs_departures`, `fcfs_service_times`: single-server equation (1).
 - `ps_service_times`: complete-event PS integral, equation (7).
+- `ps_departures`: initially empty, unit-capacity PS forward simulation from
+  supplied service requirements. A virtual-service clock and completion heap
+  give O(n log n) runtime, preserving input job order and handling tied events.
 - `ps_log_jacobian`: reciprocal-occupancy factor, equation (8). Service,
   arrival, and routing densities would still be needed for a full likelihood.
 
@@ -38,6 +41,7 @@ Nonfinite or missing times are rejected. Tests use analytical unit fixtures.
 # Repository root, Python 3.12
 python -m pip install -r requirements-dev.txt
 python -m pytest tests/test_queueing_events.py
+python -m pytest tests/test_queueing_ps_forward.py
 python -m pytest
 ```
 
@@ -64,3 +68,4 @@ a rejection prior. The existing `py_inference` ensemble sampler is distinct
 from Sutton–Jordan's latent-event slice sampler and stochastic EM. Network
 simulation, experiment inference, and performance comparisons follow once the
 inputs and model roles are established.
+

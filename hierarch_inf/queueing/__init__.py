@@ -6,6 +6,7 @@ These are complete-event primitives, not a missing-data inference workflow.
 from .events import (
     fcfs_departures,
     fcfs_service_times,
+    ps_departures,
     ps_log_jacobian,
     ps_service_times,
 )
@@ -13,6 +14,8 @@ from .events import (
 __all__ = [
     "fcfs_departures",
     "fcfs_service_times",
+    "ps_departures",
     "ps_log_jacobian",
     "ps_service_times",
 ]
+
