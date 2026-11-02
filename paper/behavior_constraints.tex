@@ -1,0 +1,147 @@
+% Proposed mathematical formulation for the queueing paper.
+% The behavioral observable and application-specific contract are to be selected.
+% Requires amsmath, amssymb, amsthm, and a proposition environment.
+\section{Behavioral constraints for posterior restriction}
+
+Let $D$ denote the observations and let $\pi(d\theta\mid D)$ be a
+well-defined posterior on a measurable detailed-model parameter space
+$\Theta$. Let $u\in\mathcal U$ specify the workload and operating conditions.
+For each $\theta$, define a measurable behavioral observable $B(\theta)$ in
+a metric space $(\mathcal B,d)$. The observable includes the conditions in
+$\mathcal U$ over which the guarantee is required. Let $\mathcal A$ denote
+the assumptions on the workload, queue discipline, initial condition, and
+service law under which the models and their observables are defined.
+
+We specify the required behavior using measurable functions
+$g_j:\mathcal B\to\mathbb R$, $j=1,\ldots,J$, and define
+\[
+ F=\{\theta\in\Theta:g_j(B(\theta))\leq0,\ j=1,\ldots,J\}.
+\]
+We construct a measurable retained set $K\subseteq F$ with
+$Z_K:=\pi(K\mid D)>0$ and infer parameters using the restricted posterior
+\[
+ \pi_K(d\theta\mid D)
+ =\frac{\mathbf 1_K(\theta)\pi(d\theta\mid D)}{Z_K}.
+\]
+Every parameter distributed according to $\pi_K$ then satisfies the
+specified behavioral constraints almost surely. The choice of $K$ controls
+the range of parameters explored during inference.
+
+\subsection{Contract bounds across the hierarchy}
+
+Let $\hat\theta\in\widehat\Theta$ denote reduced-model parameters, let
+$\widehat B(\hat\theta)\in\mathcal B$ denote their measurable behavioral observable,
+and let $\hat\pi(d\hat\theta\mid D)$ be the reduced posterior. Suppose
+each $g_j$ is $L_j$-Lipschitz with respect to $d$. A contract
+$C=(\mathcal A,G_C)$ supplies a jointly measurable upper bound $U_C$ satisfying
+\[
+ \mathcal A\ \Longrightarrow\
+ d\bigl(B(\theta),\widehat B(\hat\theta)\bigr)
+ \leq U_C(\theta,\hat\theta)
+\]
+for every pair on its stated domain. Set $U_C=+\infty$ outside that domain.
+For $\epsilon\geq0$, define the certified compatibility relation
+\[
+ R_C(\theta)=\left\{\hat\theta:
+ U_C(\theta,\hat\theta)\leq\epsilon,\quad
+ g_j(\widehat B(\hat\theta))+L_j\epsilon\leq0
+ \text{ for every }j\right\}.
+\]
+Its reduced-posterior support and retained level set are
+\[
+ b_C(\theta)=\int\mathbf1_{R_C(\theta)}(\hat\theta)
+                  \hat\pi(d\hat\theta\mid D),\qquad
+ K_{C,\gamma}=\{\theta:b_C(\theta)\geq\gamma\},
+ \quad 0<\gamma\leq1.
+\]
+
+\begin{proposition}
+Under $\mathcal A$ and the contract and Lipschitz assumptions above,
+$K_{C,\gamma}\subseteq F$. If $\pi(K_{C,\gamma}\mid D)>0$, the posterior
+restricted to $K_{C,\gamma}$ satisfies the behavioral constraints almost
+surely.
+\end{proposition}
+\begin{proof}
+For $\theta\in K_{C,\gamma}$, positivity of $\gamma$ implies that
+$R_C(\theta)$ is nonempty. Choose $\hat\theta\in R_C(\theta)$. For every
+$j$, the Lipschitz and contract bounds give
+\[
+ g_j(B(\theta))
+ \leq g_j(\widehat B(\hat\theta))
+       +L_j d(B(\theta),\widehat B(\hat\theta))
+ \leq g_j(\widehat B(\hat\theta))+L_j\epsilon\leq0.
+\]
+Thus $\theta\in F$. The posterior statement follows by restriction to
+$K_{C,\gamma}$ and normalization by its positive posterior mass.
+\end{proof}
+
+For $M\geq1$ reduced-model parameter samples $\hat\theta^{(1)},\ldots,
+\hat\theta^{(M)}$, define
+\[
+ b_{C,M}(\theta)=\frac1M\sum_{m=1}^M
+       \mathbf1_{R_C(\theta)}(\hat\theta^{(m)}).
+\]
+The same inclusion holds for
+$K_{C,\gamma,M}=\{\theta:b_{C,M}(\theta)\geq\gamma\}$: membership
+provides at least one certified pair. This finite-sample implication uses
+the validity of the evaluated contract bounds. Estimation of the population
+support $b_C$ is a separate statistical calculation.
+
+A fixed additional screening set $S$ yields
+$K=K_{C,\gamma,M}\cap S\subseteq F$, provided $\pi(K\mid D)>0$.
+This permits learned screening of proposals while preserving the contract
+certificate for every retained parameter. An implementation may check the
+certificate for each accepted candidate or prove the inclusion for the
+entire region accepted by the learned model.
+
+\subsection{Stochastic queueing observables}
+
+For a stochastic queueing model, let $R_{\theta,u}$ be the response time
+of a request under conditions $u$. The observable may be a distribution
+functional such as $B(\theta)(u)=\mathbb E[R_{\theta,u}]$, assuming this
+expectation exists, or the response-time distribution
+$B(\theta)(u,t)=\Pr(R_{\theta,u}\leq t)$. A bound on the former controls
+the mean. A probability requirement uses the latter explicitly.
+
+For example, on a finite set of specified workloads, with a deadline $r_u$
+and violation tolerance $\delta_u$ for each workload,
+the requirement $\Pr(R_{\theta,u}>r_u)\leq\delta_u$ becomes
+\[
+ g_u(B)=1-B(u,r_u)-\delta_u\leq0.
+\]
+Under the supremum metric on distribution functions, $g_u$ is
+$1$-Lipschitz. A certified discrepancy at most $\epsilon$ and reduced-model
+bound $\widehat B(\hat\theta)(u,r_u)\geq1-\delta_u+\epsilon$ therefore
+certify the detailed-model requirement. A posterior supported on this
+retained set also has posterior-predictive violation probability at most
+$\delta_u$, by integrating the conditional violation probabilities.
+
+When a reduced observable is estimated by $\widetilde B(\hat\theta)$,
+suppose its error satisfies
+$d(\widehat B(\hat\theta),\widetilde B(\hat\theta))\leq e(\hat\theta)$
+on a stated coverage event. With the same contract bound on the true
+model pair, the computable feasibility condition is
+\[
+ g_j(\widetilde B(\hat\theta))
+       +L_j\bigl(e(\hat\theta)+\epsilon\bigr)\leq0,
+ \qquad j=1,\ldots,J.
+\]
+Statistically estimated contract bounds likewise need valid upper bounds
+in the compatibility test. The resulting certificate is conditional on
+their simultaneous coverage event. If
+that event has probability at least $1-\alpha$, the set-inclusion guarantee
+holds with that confidence. Adaptive parameter evaluations require
+coverage valid for the selected evaluations, for example a uniform bound
+or conditional bounds with an allocated total error probability. A GP
+membership probability alone supplies its stated model-based probability;
+the certificate requires the corresponding sound or calibrated bound.
+
+\subsection{Evaluation}
+
+We evaluate behavioral error or violation probability under the specified
+workloads, the fraction of posterior parameter proposals retained, and
+effective samples per unit elapsed time. Elapsed time includes contract
+construction, reduced-model inference, learning, and detailed-model
+inference. The restricted posterior and its positive normalizing mass
+define the sampling target. Convergence of a chosen sampler to that target
+requires the assumptions appropriate to its transition kernel.
