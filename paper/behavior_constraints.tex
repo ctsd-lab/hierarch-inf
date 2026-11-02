@@ -1,5 +1,6 @@
 % Proposed mathematical formulation for the queueing paper.
-% The behavioral observable and application-specific contract are to be selected.
+% Selected observable: mean response time as workload changes.
+% Tolerance, reference curve, workload range, and concrete contract remain symbolic.
 % Requires amsmath, amssymb, amsthm, and a proposition environment.
 \section{Behavioral constraints for posterior restriction}
 
@@ -94,27 +95,76 @@ certificate for every retained parameter. An implementation may check the
 certificate for each accepted candidate or prove the inclusion for the
 entire region accepted by the learned model.
 
-\subsection{Stochastic queueing observables}
+\subsection{Mean response time across workloads}
 
-For a stochastic queueing model, let $R_{\theta,u}$ be the response time
-of a request under conditions $u$. The observable may be a distribution
-functional such as $B(\theta)(u)=\mathbb E[R_{\theta,u}]$, assuming this
-expectation exists, or the response-time distribution
-$B(\theta)(u,t)=\Pr(R_{\theta,u}\leq t)$. A bound on the former controls
-the mean. A probability requirement uses the latter explicitly.
-
-For example, on a finite set of specified workloads, with a deadline $r_u$
-and violation tolerance $\delta_u$ for each workload,
-the requirement $\Pr(R_{\theta,u}>r_u)\leq\delta_u$ becomes
+Let $\lambda\in\Lambda$ denote the workload, with the remaining operating
+conditions fixed by $\mathcal A$. Let $R_{\theta,\lambda}$ denote request
+response time and define
 \[
- g_u(B)=1-B(u,r_u)-\delta_u\leq0.
+ m_\theta(\lambda)=\mathbb E_{\theta,\lambda}[R_{\theta,\lambda}],
+ \qquad B(\theta)=m_\theta.
 \]
-Under the supremum metric on distribution functions, $g_u$ is
-$1$-Lipschitz. A certified discrepancy at most $\epsilon$ and reduced-model
-bound $\widehat B(\hat\theta)(u,r_u)\geq1-\delta_u+\epsilon$ therefore
-certify the detailed-model requirement. A posterior supported on this
-retained set also has posterior-predictive violation probability at most
-$\delta_u$, by integrating the conditional violation probabilities.
+The response-time observation regime is part of $\mathcal A$. A stationary
+interpretation requires stability and finite first response-time moments
+throughout the parameter and workload domain. A finite-window
+interpretation specifies the initial state, arrival protocol, window, and
+request population over which the expectation is taken. We assume the
+resulting mean curves are bounded on $\Lambda$, the induced discrepancies
+and constraints are measurable, and all contract bounds hold throughout
+this same domain.
+
+Let $m_{\mathrm{ref}}:\Lambda\to\mathbb R$ be a bounded reference
+mean-response curve and let $\tau:\Lambda\to[0,\infty)$ be a bounded
+prescribed tolerance.
+The behavioral requirement is
+\[
+ |m_\theta(\lambda)-m_{\mathrm{ref}}(\lambda)|\leq\tau(\lambda)
+ \quad\text{for every }\lambda\in\Lambda.
+\]
+With the supremum metric
+$d(m,\hat m)=\sup_{\lambda\in\Lambda}|m(\lambda)-\hat m(\lambda)|$,
+this requirement is expressed by the $1$-Lipschitz constraint
+\[
+ g(m)=\sup_{\lambda\in\Lambda}
+     \bigl(|m(\lambda)-m_{\mathrm{ref}}(\lambda)|-\tau(\lambda)\bigr)
+ \leq0.
+\]
+A uniform absolute tolerance is represented by $\tau(\lambda)=\Delta$.
+A relative tolerance is represented by
+$\tau(\lambda)=\kappa m_{\mathrm{ref}}(\lambda)$ when
+$m_{\mathrm{ref}}(\lambda)>0$. The tolerance and reference are specified
+inputs to the formulation.
+
+For the reduced mean curve $\hat m_{\hat\theta}$, the certificate becomes
+\[
+ U_C(\theta,\hat\theta)\leq\epsilon,\qquad
+ |\hat m_{\hat\theta}(\lambda)-m_{\mathrm{ref}}(\lambda)|+\epsilon
+       \leq\tau(\lambda)\quad\text{for every }\lambda\in\Lambda.
+\]
+The proposition therefore gives a restricted posterior supported on
+parameters whose mean response-time curves satisfy the prescribed error
+bound. It also bounds the restricted posterior-predictive mean curve:
+by integration and the triangle inequality,
+\[
+ \left|\int m_\theta(\lambda)\,\pi_K(d\theta\mid D)
+                     -m_{\mathrm{ref}}(\lambda)\right|
+ \leq\tau(\lambda),\qquad\lambda\in\Lambda.
+\]
+For a finite workload grid, the guarantee applies at those workload
+values. Extending it to an interval requires a contract valid throughout
+the interval or a bound controlling the variation between grid points.
+
+The contract must bound the mean-response discrepancy. For example, a
+coupling of the detailed and reduced response times that satisfies
+\[
+ \sup_{\lambda\in\Lambda}
+ \mathbb E\bigl[|R_{\theta,\lambda}-\widehat R_{\hat\theta,\lambda}|\bigr]
+ \leq U_C(\theta,\hat\theta)
+\]
+provides the required bound by Jensen's inequality, assuming the coupled
+variables have the stated model marginals. A distribution-based
+construction must control the response-time tails sufficiently to bound
+these first moments.
 
 When a reduced observable is estimated by $\widetilde B(\hat\theta)$,
 suppose its error satisfies
